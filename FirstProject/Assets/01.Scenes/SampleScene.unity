@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 405839142}
   - component: {fileID: 405839144}
   - component: {fileID: 405839143}
+  - component: {fileID: 405839145}
   m_Layer: 0
   m_Name: Bound
   m_TagString: Untagged
@@ -514,6 +515,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405839141}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &405839145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405839141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7c71dc3b7837224cb85035b4b03bfce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,10 +847,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf3a353516e4f540bcacd6f9a804bec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sizeX: 8
-  _sizeY: 12
-  _nodeWidth: 1.01
-  _nodeHeight: 1.01
+  _sizeX: 10
+  _sizeY: 16
+  _nodeWidth: 1
+  _nodeHeight: 1
   _bottomCentor: {x: 0, y: -6, z: 0}
   _basicBlocks:
   - {fileID: 7328137325542894679, guid: 4eeb35bd5c4f2a849955df78218ec1fd, type: 3}
