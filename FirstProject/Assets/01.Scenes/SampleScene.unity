@@ -805,6 +805,62 @@ Transform:
   - {fileID: 563825749}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1790123741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1790123743}
+  - component: {fileID: 1790123742}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1790123742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790123741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cf3a353516e4f540bcacd6f9a804bec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sizeX: 8
+  _sizeY: 12
+  _nodeWidth: 1.01
+  _nodeHeight: 1.01
+  _bottomCentor: {x: 0, y: -6, z: 0}
+  _basicBlocks:
+  - {fileID: 7328137325542894679, guid: 4eeb35bd5c4f2a849955df78218ec1fd, type: 3}
+  - {fileID: 7328137325542894679, guid: 41ea0b19911a7e14ba5c6d6304630ff7, type: 3}
+  - {fileID: 7328137325542894679, guid: 054746f543aa57844b530457e79d7e99, type: 3}
+  - {fileID: 7328137325542894679, guid: 7e64eac77e5e4f54daeddd287f103d53, type: 3}
+  - {fileID: 7328137325542894679, guid: 9ecdcd06e0457de498ba6eb1377a97f8, type: 3}
+  - {fileID: 7328137325542894679, guid: 8ee6ea1b7871e0f459a09175a15f2d83, type: 3}
+--- !u!4 &1790123743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790123741}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2031047017
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,7 +878,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2031047018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -877,3 +933,4 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1703748272}
   - {fileID: 2031047019}
+  - {fileID: 1790123743}

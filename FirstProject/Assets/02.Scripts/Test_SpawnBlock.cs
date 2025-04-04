@@ -24,6 +24,9 @@ public class Test_SpawnBlock : MonoBehaviour
     [SerializeField] [Trash] GameObject _basicBlockBlue;
     [SerializeField] GameObject _basicBlockPurple;
 
+    Transform _blockRedTransform;
+    Transform _blockOrangeTransform;
+    GameObject _blockYellow;
 
     private void Awake()
     {
@@ -43,14 +46,32 @@ public class Test_SpawnBlock : MonoBehaviour
     {
         // Component 들은 직접 생성자를 호출하는게 아니고, GameObject.AddComponent를 통해서 내부적으로 생성하는 것이기 때문에
         // Prefab 으로 복사본 인스턴스를 만들고 싶다면 UnityEngine.Object.Instantiate() 를 호출해야 한다.
-        Instantiate(_basicBlockRed); // Game World 에 인스턴스 생성
+        _blockRedTransform = Instantiate(_basicBlockRed).transform; // Game World 에 인스턴스 생성
 
         Transform target = GetComponent<Transform>(); // 현재 GameObject 가 가지고 있는 컴포넌트들 중 Transform 타입을 찾아서 반환
-        Instantiate(_basicBlockOrange, target);
+        _blockOrangeTransform = Instantiate(_basicBlockOrange, target).transform;
 
-        Instantiate(_basicBlockYellow, transform); // transform 프로퍼티 : 현재 GameObject 에 캐싱된 Transform 을 반환
-        Instantiate(_basicBlockGreen);
+        _basicBlockYellow = Instantiate(_basicBlockYellow, transform); // transform 프로퍼티 : 현재 GameObject 에 캐싱된 Transform 을 반환
+        
+        Instantiate(_basicBlockGreen, new Vector3(1f,1f,1f), Quaternion.Euler(30f,15f,-20f));
         Instantiate(_basicBlockBlue);
-        Instantiate(_basicBlockPurple);
+
+        GameObject purpleBlock = Instantiate(_basicBlockPurple);
+        MeshRenderer meshRenderer = purpleBlock.GetComponent<MeshRenderer>();
+        meshRenderer.material.color = Color.gray; // 실제로는 이런식으로 쓰면 머티리얼 인스턴스 또 생기니까 쓰면 안됌.
+    }
+
+    // 다음 위치 = 현재 위치 + 속도 * 시간변화
+    // 다음 프레임 위치 = 현재 위치 + 속도 * 이전프레임에서부터 현재까지 걸린 시간(프레임당 시간변화량)
+    private void Update()
+    {
+        //Vector3 targetPosition = _blockRedTransform.position + Vector3.up * Time.deltaTime;
+        //_blockRedTransform.position = targetPosition;
+
+        //_blockRedTransform.position += Vector3.up * Time.deltaTime;
+        _blockRedTransform.Translate(Vector3.up * Time.deltaTime,Space.World);
+
+        //_blockRedTransform.rotation *= Quaternion.Euler(30f * Time.deltaTime, 30f * Time.deltaTime, 30f * Time.deltaTime);
+        _blockRedTransform.Rotate(Vector3.one * 30f * Time.deltaTime, Space.Self);
     }
 }
