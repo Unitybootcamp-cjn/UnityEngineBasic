@@ -7,10 +7,19 @@ namespace Match3.InGame.LevelSystems
     public class Map : MonoBehaviour
     {
         [SerializeField] public int _sizeX = 8;
+        public int SizeX
+        {
+            get { return _sizeX; }
+        }
         [SerializeField] public int _sizeY = 12;
+        public int SizeY => _sizeY;
         [SerializeField] public float _nodeWidth = 1;
+        public float NodeWidth => _nodeWidth;
         [SerializeField] public float _nodeHeight = 1;
+        public float NodeHeight => _nodeHeight;
         [SerializeField] Vector3 _bottomCentor;
+        public Vector3 BottomCenter => _bottomCentor;
+
         Node[,] _nodes;
         [SerializeField] GameObject[] _basicBlocks;
 

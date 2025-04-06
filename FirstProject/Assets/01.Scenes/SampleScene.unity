@@ -180,7 +180,7 @@ Camera:
   near clip plane: 3
   far clip plane: 50
   field of view: 60.000004
-  orthographic: 1
+  orthographic: 0
   orthographic size: 7.76
   m_Depth: 0
   m_CullingMask:
@@ -267,8 +267,9 @@ GameObject:
   - component: {fileID: 346312005}
   - component: {fileID: 346312007}
   - component: {fileID: 346312006}
+  - component: {fileID: 346312008}
   m_Layer: 0
-  m_Name: Bound (1)
+  m_Name: Bound1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,6 +343,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 346312004}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &346312008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346312004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7c71dc3b7837224cb85035b4b03bfce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &388219600
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,8 +366,9 @@ GameObject:
   - component: {fileID: 388219601}
   - component: {fileID: 388219603}
   - component: {fileID: 388219602}
+  - component: {fileID: 388219604}
   m_Layer: 0
-  m_Name: Bound (2)
+  m_Name: Bound2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,6 +442,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388219600}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &388219604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388219600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7c71dc3b7837224cb85035b4b03bfce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &405839141
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,8 +685,9 @@ GameObject:
   - component: {fileID: 563825749}
   - component: {fileID: 563825751}
   - component: {fileID: 563825750}
+  - component: {fileID: 563825752}
   m_Layer: 0
-  m_Name: Bound (3)
+  m_Name: Bound3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,6 +761,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563825748}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &563825752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563825748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7c71dc3b7837224cb85035b4b03bfce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,8 +886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf3a353516e4f540bcacd6f9a804bec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sizeX: 10
-  _sizeY: 16
+  _sizeX: 8
+  _sizeY: 10
   _nodeWidth: 1
   _nodeHeight: 1
   _bottomCentor: {x: 0, y: -6, z: 0}
