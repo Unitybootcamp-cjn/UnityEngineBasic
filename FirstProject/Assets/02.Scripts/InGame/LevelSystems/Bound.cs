@@ -16,40 +16,49 @@ namespace Match3.InGame.LevelSystems
 
         private void Awake()
         {
-            _map = FindAnyObjectByType<Map>();
-            _transform = GetComponent<Transform>();
+            _map = FindAnyObjectByType<Map>(); // Map 클래스를 쓰는 오브젝트를 변수에 저장
+            _transform = GetComponent<Transform>(); // 이 컴포넌트의 Transform을 저장
         }
 
         private void Start()
         {
-            _transformX = (float)(_map.SizeX) * (_map.NodeWidth);
-            _transformY = (float)(_map.SizeY) * (_map.NodeHeight);
-            
-            if(_transform.name == "Bound")
+            _transformX = (float)(_map.SizeX) * (_map.NodeWidth); // Map클래스의 SizeX(X축 블록의 갯수)와 NodeWidth(블록의 가로 길이)를 곱함.
+            _transformY = (float)(_map.SizeY) * (_map.NodeHeight);// Map클래스의 SizeY(Y축 블록의 갯수)와 NodeHeight(블록의 세로 길이)를 곱함.
+
+            // 이 컴포넌트의 이름을 확인하는 조건문
+            if (_transform.name == "Bound")
             {
-                boundVector = new Vector3(-(_transformX / 2f + 0.5f - _map.BottomCenter.x), ((_transformY / 2f) + _map.BottomCenter.y), _map.BottomCenter.z);
-                this.transform.localScale = new Vector3(1f, _transformY, 1f);
+                boundVector = new Vector3(-(_transformX / 2f + 0.5f - _map.BottomCenter.x),
+                                         ((_transformY / 2f) + _map.BottomCenter.y),
+                                         _map.BottomCenter.z); // 해당 Bound에 맞는 Vector3좌표 계산
+                this.transform.localScale = new Vector3(1f, _transformY, 1f); // 해당 Bound에 맞는 스케일값 계산
             }
             else if(_transform.name == "Bound1")
             {
-                boundVector = new Vector3((_transformX / 2f + 0.5f + _map.BottomCenter.x), ((_transformY / 2f) + _map.BottomCenter.y), _map.BottomCenter.z);
+                boundVector = new Vector3((_transformX / 2f + 0.5f + _map.BottomCenter.x),
+                                         ((_transformY / 2f) + _map.BottomCenter.y),
+                                         _map.BottomCenter.z);
                 this.transform.localScale = new Vector3(1f, _transformY, 1f);
             }
             else if( _transform.name == "Bound2")
             {
-                boundVector = new Vector3(_map.BottomCenter.x, _map.BottomCenter.y - 0.5f, _map.BottomCenter.z);
+                boundVector = new Vector3(_map.BottomCenter.x,
+                                          _map.BottomCenter.y - 0.5f,
+                                          _map.BottomCenter.z);
                 this.transform.localScale = new Vector3(_transformX + 2, 1f, 1f);
             }
             else if( _transform.name == "Bound3")
             {
-                boundVector = new Vector3(_map.BottomCenter.x, ((_transformY / 2f) + _map.BottomCenter.y) - 0.5f, _map.BottomCenter.z + 1);
+                boundVector = new Vector3(_map.BottomCenter.x,
+                                         ((_transformY / 2f) + _map.BottomCenter.y) - 0.5f,
+                                         _map.BottomCenter.z + 1);
                 this.transform.localScale = new Vector3(_transformX + 2, _transformY + 1, 1f);
             }
             else
             {
                 Debug.LogError("이 컴포넌트는 Bound 컴포넌트가 아닙니다");
             }
-            this.transform.position = boundVector;
+            this.transform.position = boundVector; // 컴포넌트 위치 변경
         }
     }
 }
