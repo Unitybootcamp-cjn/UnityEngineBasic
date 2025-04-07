@@ -201,18 +201,50 @@ namespace Match3.InGame.LevelSystems
                 }
                 else
                 {
-                    break; // 다른 색 나오면 위쪽 탐색 끝
+                    break; // 다른 색 나오면 아래쪽 탐색 끝
                 }
                 i--; // 한 칸 아래로
             }
+            
+            // 오른쪽 탐색
+            j = x + 1; // 한 칸 오른쪽으로
+            while (j < _sizeX) // 오른쪽 맵 경계
+            {
+                // 한칸 오른쪽 블록이 같은 타일이면
+                if (_nodes[i, j].TypeFlags == currentTypes)
+                {
+                    tempTrackingList.Add((j, i)); // 추적대상등록
+                }
+                else
+                {
+                    break; // 다른 색 나오면 오른쪽 탐색 끝
+                }
+                i++; // 한칸 오른쪽으로
+            }
 
-            if(tempTrackingList.Count >= 2)
+            // 왼쪽 탐색
+            j = x - 1; // 한 칸 왼쪽으로
+            while (j >= 0) // 왼쪽 맵 경계
+            {
+                // 한칸 왼쪽 블록이 같은 타일이면
+                if (_nodes[i, j].TypeFlags == currentTypes)
+                {
+                    tempTrackingList.Add((j, i)); // 추적대상등록
+                }
+                else
+                {
+                    break; // 다른 색 나오면 왼쪽 탐색 끝
+                }
+                i--; // 한칸 왼쪽으로
+            }
+
+
+            if (tempTrackingList.Count >= 2)
             {
                 appendedResults.AddRange(tempTrackingList); // 매치조건된 블록들을 결과에 붙임
                 result = true;
             }
 
-            // TODO : 좌우 똑같이 해야함
             tempTrackingList.Clear();
 
             // 매치 조건이 하나라도 있다면 현재 위치도 결과에 추가해야한다 (현재위치도 파괴해야하니까)
