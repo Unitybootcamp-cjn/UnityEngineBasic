@@ -887,7 +887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sizeX: 8
-  _sizeY: 10
+  _sizeY: 12
   _nodeWidth: 1
   _nodeHeight: 1
   _bottomCentor: {x: 0, y: -6, z: 0}
