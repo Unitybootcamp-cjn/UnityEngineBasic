@@ -4,16 +4,14 @@ namespace Match3.InGame.LevelSystems
 {
     public struct Node
     {
-        public Node(int x, int y, NodeTypes typeFlags, Transform block)
+        public Node(NodeTypes typeFlags, Transform block)
         {
-            X = x;
-            Y = y;
+            IsScheduledForDestroy = false;
             TypeFlags = typeFlags;
             Block = block;
         }
 
-        public int X;
-        public int Y;
+        public bool IsScheduledForDestroy;
         public NodeTypes TypeFlags;
         public Transform Block; 
 

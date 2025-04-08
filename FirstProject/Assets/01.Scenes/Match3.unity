@@ -916,8 +916,11 @@ MonoBehaviour:
   - {fileID: 7328137325542894679, guid: 7e64eac77e5e4f54daeddd287f103d53, type: 3}
   - {fileID: 7328137325542894679, guid: 9ecdcd06e0457de498ba6eb1377a97f8, type: 3}
   - {fileID: 7328137325542894679, guid: 8ee6ea1b7871e0f459a09175a15f2d83, type: 3}
+  _gravity: {x: 0, y: -4, z: 0}
   _oscillationAmplitude: {x: 10, y: 10, z: 10}
   _oscillationVelocity: {x: 10, y: 10, z: 10}
+  _swapFailedAnimSpeed: 2
+  _swipeMinDelta: 50
 --- !u!4 &1790123743
 Transform:
   m_ObjectHideFlags: 0
