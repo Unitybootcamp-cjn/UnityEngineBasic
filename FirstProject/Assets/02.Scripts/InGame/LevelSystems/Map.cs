@@ -240,30 +240,6 @@ namespace Match3.InGame.LevelSystems
                     _nodes[_matchResults[i].y, _matchResults[i].x].Block = null;
                 }
 
-
-
-                for (int i = 0; i < _matchResults.Count; i++)
-                {
-                    // 파괴한 블록 위부터 젤 위까지 탐색하면서 파괴된 자리에 떨어뜨릴 블록 찾음
-                    for (int row = _matchResults[i].y + 1; row < _sizeY; row++)
-                    {
-                        int col = _matchResults[i].x;
-                        // 얘도 파괴됐으니까 다음꺼 찾아야함
-                        if (_nodes[row, col].IsScheduledForDestroy)
-                            continue;
-
-                        // 떨어질 블록 찾음
-                        float fallingDistance = row - _matchResults[i].y * _nodeHeight;
-                        Vector3 end = GetPositionFromIndex(col, _matchResults[i].y);
-                        Vector3 start = end + Vector3.up * fallingDistance;
-                        _nodes[_matchResults[i].y, col].Block = _nodes[row, col].Block;
-                        _nodes[row, col].Block = null;
-
-                        StartCoroutine(C_FallingAnimation(_nodes[_matchResults[i].y, col].Block, start, end));
-                    }
-                }
-
-
                 // TODO : 전체 맵을 순회하지 않고 필요한 노드만 순회할 수 있게끔 코드 최적화
                 for (int col = 0; col < _sizeX; col++)
                 {
