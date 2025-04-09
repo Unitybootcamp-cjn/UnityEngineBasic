@@ -13,32 +13,36 @@ namespace Match3.InGame.LevelSystems
 {
     public class Map : MonoBehaviour
     {
-        public bool EnableInput {  get; set; }
+        public bool EnableInput {  get; set; } // 해당 변수가 false일 때는 마우스의 입력을 받지 않도록 하는 변수
 
         [Header("Map spec")]
-        [SerializeField] int _sizeX = 8;
+        [SerializeField] int _sizeX = 8; // 블록의 가로 갯수
         public int SizeX => _sizeX;
-        [SerializeField] int _sizeY = 12;
+        [SerializeField] int _sizeY = 12;// 블록의 세로 갯수
         public int SizeY => _sizeY;
-        [SerializeField] float _nodeWidth = 1;
+        [SerializeField] float _nodeWidth = 1;// 블록 하나의 가로 길이
         public float NodeWidth => _nodeWidth;
-        [SerializeField] float _nodeHeight = 1;
+        [SerializeField] float _nodeHeight = 1;// 블록 하나의 세로 길이
         public float NodeHeight => _nodeHeight;
-        [SerializeField] Vector3 _bottomCenter;
+        [SerializeField] Vector3 _bottomCenter;// 블록들을 나열할 곳의 정가운데 가장 밑부분의 벡터. 기준이 되어줌
         public Vector3 BottomCenter => _bottomCenter;
-        Node[,] _nodes;
-        [SerializeField] GameObject[] _basicBlocks;
-        Camera _camera;
-        Vector3 _leftBottom;
-        Vector3 _rightTop;
-        float _boundLeft;
-        float _boundBottom;
-        float _boundRight;
-        float _boundTop;
+        Node[,] _nodes; // 블록 하나 하나를 저장할 구조체 Node로 만든 2차원배열 변수
+        // 게임 오브젝트 배열을 시리얼라이즈필드로 선언해서 유니티 인스펙터창에서 게임오브젝트를 받아와서 채움.
+        // 만들어놓은 Prefabs에 있는 여러가지 색의 블록들을 시리얼라이즈 필드를 통해 _basicBlocks 변수로 넣음.
+        // 그럼 _basicBlocks[0]부터 해당 색깔의 블록이 차지하게됌.
+        [SerializeField] GameObject[] _basicBlocks; 
+        Camera _camera; // 메인 카메라의 변수
+        Vector3 _leftBottom; // 블록을 나열할 맵의 왼쪽 아래 값을 저장할 변수
+        Vector3 _rightTop; // 블록을 나열할 맵의 오른쪽 위 값을 저장할 변수
+        float _boundLeft; // Bound(경계선)의 왼쪽 경계가 어딘지 나타내는 X축 값
+        float _boundBottom; // Bound(경계선)의 아래쪽 경계가 어딘지 나타내는 Y축 값
+        float _boundRight; // Bound(경계선)의 오른쪽 경계가 어딘지 나타내는 X축 값
+        float _boundTop; // Bound(경계선)의 위쪽 경계가 어딘지 나타내는 Y축 값
 
         [Header("Physics")]
-        [SerializeField] Vector3 _gravity = new Vector3(0f, -4f, 0f);
-        int _animationCount;
+        [SerializeField] Vector3 _gravity = new Vector3(0f, -4f, 0f); // 블록이 떨어지는 속도를 조절하기 위한 변수
+        int _animationCount; // 애니메이션이 실행되고 있을 땐 1, 실행되고있지 않을 땐 0이 들어가
+                             // 애니메이션 도중 다른 행동을 못하게 만드는 변수
 
         [Header("Oscillation animation")]
         [SerializeField] Vector3 _oscillationAmplitude;
