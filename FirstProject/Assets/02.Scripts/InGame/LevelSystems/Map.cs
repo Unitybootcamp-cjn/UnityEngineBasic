@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
@@ -12,6 +13,8 @@ namespace Match3.InGame.LevelSystems
 {
     public class Map : MonoBehaviour
     {
+        public bool EnableInput {  get; set; }
+
         [Header("Map spec")]
         [SerializeField] int _sizeX = 8;
         public int SizeX => _sizeX;
@@ -51,6 +54,11 @@ namespace Match3.InGame.LevelSystems
         Vector3 _dragBeginPosition;
         bool _isDragging;
 
+        [Header("Start Counting")]
+        [SerializeField] TextMeshPro _startCounting;
+
+        List<(int x, int y)> _changedIndices;
+
         (int x, int y) _selectedIndex = (-1, -1);
 
         bool IsSelected => _selectedIndex.Item1 >= 0 && _selectedIndex.Item2 >= 0;
@@ -62,6 +70,7 @@ namespace Match3.InGame.LevelSystems
             _nodes = new Node[_sizeY, _sizeX];
             _oscillatingIndices = new List<(int, int)>(_sizeX * _sizeY);
             _matchResults = new List<(int, int)>(_sizeX * _sizeY);
+            _changedIndices = new List<(int x, int y)>(_sizeX * _sizeY);
 
             _leftBottom = new Vector3(x: (0 - (_sizeX - 1) * 0.5f) * _nodeWidth,
                                              y: (0 + 0.5f) * _nodeHeight,
@@ -83,6 +92,7 @@ namespace Match3.InGame.LevelSystems
         {
             _camera = Camera.main;
             SetNodesRandomly();
+            StartCoroutine(C_Init());
         }
 
         private void Update()
@@ -93,6 +103,9 @@ namespace Match3.InGame.LevelSystems
 
         void HandleInput()
         {
+            if(EnableInput == false)
+                return;
+
             if (_animationCount > 0)
                 return;
 
@@ -187,6 +200,36 @@ namespace Match3.InGame.LevelSystems
             }
         }
 
+        IEnumerator C_Init()
+        {
+            EnableInput = false;
+            WaitForSeconds waitFor1Seconds = new WaitForSeconds(1);
+            for (int i = 3; i > 0; i--)
+            {
+                _startCounting.text = i.ToString();
+                Debug.Log($"게임이 곧 시작됩니다. 남은 시간 : {i}");
+                yield return waitFor1Seconds;
+            }
+            _startCounting.text = "Start!";
+            yield return waitFor1Seconds;
+            _startCounting.enabled = false;
+            yield return C_MatchAll(); // Coroutine이 한개이고 현재 이 라인에서는 IEnumerator 의 yield로 반환, yield 하는 Coroutine이 멈추면 얘 수행 안함
+            //yield return StartCoroutine(C_MatchAll()); // 별도의 Coroutine을 만들어서 수행, yield 하는 Coroutine이 멈추어도 얘는 돌아감
+            EnableInput = true;
+        }
+
+        IEnumerator C_MatchAll()
+        {
+            MatchForAllIndices();
+
+            // 변경된 인덱스가 남지 않을 때 까지 매치 반복
+            while (_changedIndices.Count > 0)
+            {
+                yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                MatchForChangedIndices();
+            }
+        }
+
         IEnumerator C_TrySwap(int x1, int y1, int x2, int y2)
         {
             bool result = false; // 스왑 가능한지 저장하는 변수
@@ -201,6 +244,9 @@ namespace Match3.InGame.LevelSystems
             // 원래 노드값 저장
             Node node1 = _nodes[y1, x1];
             Node node2 = _nodes[y2, x2];
+
+            node1.Block.rotation = Quaternion.identity;
+            node2.Block.rotation = Quaternion.identity;
 
             // 스왑
             _nodes[y1, x1] = node2;
@@ -220,30 +266,30 @@ namespace Match3.InGame.LevelSystems
             // 스왑가능하면 매치조건 맞는거 삭제하면서 터뜨리는 애니메이션 진행
             if(result)
             {
-                yield return StartCoroutine(C_SwapSuccessedAnimation(x1, y1, x2, y2));
-
-                // y축 아래서부터 y축 위로 올라가면서 순회를 해야하기 때문에 터뜨려야하는 인뎃스를 오름차순 정렬해야함.
-                _matchResults.Sort((index1, index2) =>
-                {
-
-                    if (index1.y > index2.y)
-                        return 1;
-                    else
-                        return -1;
-                });
+                yield return C_SwapSuccessedAnimation(x1, y1, x2, y2);
 
                 // 얘네들 파괴해야하니까 건들지말라고 마킹함   
                 for (int i = 0; i < _matchResults.Count; i++)
                 {
-                    Destroy(_nodes[_matchResults[i].y, _matchResults[i].x].Block.gameObject);
-                    _nodes[_matchResults[i].y, _matchResults[i].x].IsScheduledForDestroy = true;
-                    _nodes[_matchResults[i].y, _matchResults[i].x].Block = null;
+                    int y = _matchResults[i].y;
+                    int x = _matchResults[i].x;
+
+                    // 매칭 중복된 블록은 그냥 넘어감
+                    if (_nodes[y, x].IsScheduledForDestroy)
+                        continue;
+
+                    Destroy(_nodes[y, x].Block.gameObject);
+                    _nodes[y, x].IsScheduledForDestroy = true;
+                    _nodes[y, x].Block = null;
+                    _nodes[y, x].TypeFlags = NodeTypes.Nothing;
                 }
+
+                _changedIndices.Clear();
 
                 // TODO : 전체 맵을 순회하지 않고 필요한 노드만 순회할 수 있게끔 코드 최적화
                 for (int col = 0; col < _sizeX; col++)
                 {
-                    int emptyNodes = 0;
+                    int emptyNodes = 0; // 현재 행에서 비어있는 노드 수 누적 (상위 노드를 얼마나 떨어뜨려야 하는지 계산하기 위함)
 
                     for (int row = 0; row < _sizeY; row++)
                     {
@@ -257,8 +303,9 @@ namespace Match3.InGame.LevelSystems
                         {
                             int targetRow = row - emptyNodes;
                             _nodes[targetRow, col] = _nodes[row, col];
-                            _nodes[targetRow, col].IsScheduledForDestroy = false;
+                            _changedIndices.Add((col, targetRow));
                             _nodes[row, col].Block = null;
+                            _nodes[row, col].TypeFlags = NodeTypes.Nothing;
                             Vector3 start = GetPositionFromIndex(col, row);
                             Vector3 end = GetPositionFromIndex(col, targetRow);
                             StartCoroutine(C_FallingAnimation(_nodes[targetRow, col].Block, start, end));
@@ -270,16 +317,22 @@ namespace Match3.InGame.LevelSystems
                     {
                         int targetRow = _sizeY - emptyNodes + i;
 
+                        // 자연스럽게 위에서 새로 생겨서 떨어지는 연출을 위해 맵 가장 위보다 더 위에서 떨어지게끔 위치 설정
                         Vector3 start = GetPositionFromIndex(col, _sizeY - 1) + Vector3.up * (i + 1) * _nodeHeight;
                         Vector3 end = GetPositionFromIndex(col, targetRow);
-                        Transform block = SpawnRandomBlock();
+                        Transform block = SpawnRandomBlock(col, targetRow);
+                        _changedIndices.Add((col, targetRow));
                         block.position = start;
-
-                        _nodes[targetRow, col].Block = block;
-                        _nodes[targetRow, col].IsScheduledForDestroy = false;
                         StartCoroutine(C_FallingAnimation(block, start, end));
                     }
                 }
+                // 변경된 인덱스가 남지 않을 때 까지 매치 반복
+                while (_changedIndices.Count > 0)
+                {
+                    yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                    MatchForChangedIndices();
+                }
+                
             }
             // 스왑 불가능하면 스왑실패를 알리는 애니메이션 진행
             else
@@ -290,6 +343,145 @@ namespace Match3.InGame.LevelSystems
 
                 // 스왑 실패 애니메이션 실행
                 StartCoroutine(C_SwapFailedAnimation(x1, y1, x2, y2));
+            }
+        }
+        void MatchForAllIndices()
+        {
+            _matchResults.Clear();
+            _changedIndices.Clear();
+
+            // 변경된 노드들을 순회하면서 매칭조건 맞는거 찾음
+            for (int indexY = 0; indexY < _sizeY; indexY++)
+            {
+                for (int indexX = 0; indexX < _sizeX; indexX++)
+                {
+                    if (CheckMatch(indexX, indexY, _matchResults))
+                    {
+                        for (int i = 0; i < _matchResults.Count; i++)
+                        {
+                            int y = _matchResults[i].y;
+                            int x = _matchResults[i].x;
+
+                            // 매칭 중복된 블록은 그냥 넘어감
+                            if (_nodes[y, x].IsScheduledForDestroy)
+                                continue;
+
+                            Destroy(_nodes[y, x].Block.gameObject);
+                            _nodes[y, x].IsScheduledForDestroy = true;
+                            _nodes[y, x].Block = null;
+                            _nodes[y, x].TypeFlags = NodeTypes.Nothing;
+                        }
+                        
+                    }
+                }
+            }
+            for (int col = 0; col < _sizeX; col++)
+            {
+                int emptyNodes = 0; // 현재 행에서 비어있는 노드 수 누적 (상위 노드를 얼마나 떨어뜨려야 하는지 계산하기 위함)
+
+                for (int row = 0; row < _sizeY; row++)
+                {
+                    // 빈칸이면 메모
+                    if (_nodes[row, col].IsScheduledForDestroy)
+                    {
+                        emptyNodes++;
+                    }
+                    // 빈칸 아니면 여태까지 빈칸 갯수만큼 아래로 떨어뜨림
+                    else if (emptyNodes > 0)
+                    {
+                        int targetRow = row - emptyNodes;
+                        _nodes[targetRow, col] = _nodes[row, col];
+                        _changedIndices.Add((col, targetRow));
+                        _nodes[row, col].Block = null;
+                        _nodes[row, col].TypeFlags = NodeTypes.Nothing;
+                        Vector3 start = GetPositionFromIndex(col, row);
+                        Vector3 end = GetPositionFromIndex(col, targetRow);
+                        StartCoroutine(C_FallingAnimation(_nodes[targetRow, col].Block, start, end));
+                    }
+                }
+
+                // 남은 빈칸 채워주기
+                for (int i = 0; i < emptyNodes; i++)
+                {
+                    int targetRow = _sizeY - emptyNodes + i;
+
+                    // 자연스럽게 위에서 새로 생겨서 떨어지는 연출을 위해 맵 가장 위보다 더 위에서 떨어지게끔 위치 설정
+                    Vector3 start = GetPositionFromIndex(col, _sizeY - 1) + Vector3.up * (i + 1) * _nodeHeight;
+                    Vector3 end = GetPositionFromIndex(col, targetRow);
+                    Transform block = SpawnRandomBlock(col, targetRow);
+                    _changedIndices.Add((col, targetRow));
+                    block.position = start;
+                    StartCoroutine(C_FallingAnimation(block, start, end));
+                }
+            }
+        }
+        void MatchForChangedIndices()
+        {
+            // 복사본 만든 이유는 foreach 구문은 읽기 전용이기 때문에, 순회하는 원본 객체의 데이터가
+            // 순회도중 버전이 올라가면(변경사항이 생기면) 예외처리되므로 복사본을 사용하여 순회한다.
+            List<(int x, int y)> changedIndicesCopy = new List<(int x, int y)>(_changedIndices);
+            _matchResults.Clear();
+            _changedIndices.Clear();
+
+            // 변경된 노드들을 순회하면서 매칭조건 맞는거 찾음
+            foreach((int x,int y) index in changedIndicesCopy)
+            {
+                if (CheckMatch(index.x, index.y, _matchResults))
+                {
+                    for (int i = 0; i < _matchResults.Count; i++)
+                    {
+                        int y = _matchResults[i].y;
+                        int x = _matchResults[i].x;
+
+                        // 매칭 중복된 블록은 그냥 넘어감
+                        if (_nodes[y, x].IsScheduledForDestroy)
+                            continue;
+
+                        Destroy(_nodes[y, x].Block.gameObject);
+                        _nodes[y, x].IsScheduledForDestroy = true;
+                        _nodes[y, x].Block = null;
+                        _nodes[y, x].TypeFlags = NodeTypes.Nothing;
+                    }
+                }
+            }
+            for (int col = 0; col < _sizeX; col++)
+            {
+                int emptyNodes = 0; // 현재 행에서 비어있는 노드 수 누적 (상위 노드를 얼마나 떨어뜨려야 하는지 계산하기 위함)
+
+                for (int row = 0; row < _sizeY; row++)
+                {
+                    // 빈칸이면 메모
+                    if (_nodes[row, col].IsScheduledForDestroy)
+                    {
+                        emptyNodes++;
+                    }
+                    // 빈칸 아니면 여태까지 빈칸 갯수만큼 아래로 떨어뜨림
+                    else if (emptyNodes > 0)
+                    {
+                        int targetRow = row - emptyNodes;
+                        _nodes[targetRow, col] = _nodes[row, col];
+                        _changedIndices.Add((col, targetRow));
+                        _nodes[row, col].Block = null;
+                        _nodes[row, col].TypeFlags = NodeTypes.Nothing;
+                        Vector3 start = GetPositionFromIndex(col, row);
+                        Vector3 end = GetPositionFromIndex(col, targetRow);
+                        StartCoroutine(C_FallingAnimation(_nodes[targetRow, col].Block, start, end));
+                    }
+                }
+
+                // 남은 빈칸 채워주기
+                for (int i = 0; i < emptyNodes; i++)
+                {
+                    int targetRow = _sizeY - emptyNodes + i;
+
+                    // 자연스럽게 위에서 새로 생겨서 떨어지는 연출을 위해 맵 가장 위보다 더 위에서 떨어지게끔 위치 설정
+                    Vector3 start = GetPositionFromIndex(col, _sizeY - 1) + Vector3.up * (i + 1) * _nodeHeight;
+                    Vector3 end = GetPositionFromIndex(col, targetRow);
+                    Transform block = SpawnRandomBlock(col, targetRow);
+                    _changedIndices.Add((col, targetRow));
+                    block.position = start;
+                    StartCoroutine(C_FallingAnimation(block, start, end));
+                }
             }
         }
 
@@ -390,7 +582,7 @@ namespace Match3.InGame.LevelSystems
 
         }
 
-        Transform SpawnRandomBlock()
+        Transform SpawnRandomBlock(int x, int y)
         {
             Array typeArray = Enum.GetValues(typeof(NodeTypes));
             int blockIndex;
@@ -401,7 +593,10 @@ namespace Match3.InGame.LevelSystems
             blockIndex = Random.Range(0, totalNodeType);
             nodeType = (NodeTypes)(1 << blockIndex);
             block = Instantiate(_basicBlocks[blockIndex]);
-
+            block.transform.position = GetPositionFromIndex(x, y);
+            _nodes[y, x].IsScheduledForDestroy = false;
+            _nodes[y, x].TypeFlags = nodeType;
+            _nodes[y, x].Block = block.transform;
             return block.transform;
         }
 
