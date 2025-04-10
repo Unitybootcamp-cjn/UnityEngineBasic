@@ -387,7 +387,7 @@ namespace Match3.InGame.LevelSystems
 
         int CalcScore()
         {
-            return Mathf.RoundToInt(_destroyCount * Mathf.Pow(_destroyCount, POWER_PER_COMBO_STACK * _comboStack) * SCORE_PER_BLOCK);
+            return Mathf.RoundToInt(_destroyCount * Mathf.Pow(POWER_PER_COMBO_STACK, _comboStack) * SCORE_PER_BLOCK);
         }
 
         void MatchForAllIndices()
