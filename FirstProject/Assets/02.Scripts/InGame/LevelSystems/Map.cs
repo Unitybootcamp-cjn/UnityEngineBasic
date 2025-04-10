@@ -80,6 +80,7 @@ namespace Match3.InGame.LevelSystems
 
         [Header("Start Counting")]
         [SerializeField] TextMeshPro _startCounting;
+        [SerializeField] TextMeshPro _gameoverCounting;
 
         List<(int x, int y)> _changedIndices;
 
@@ -118,6 +119,7 @@ namespace Match3.InGame.LevelSystems
             _camera = Camera.main;
             SetNodesRandomly();
             StartCoroutine(C_Init());
+            StartCoroutine(C_Countdown());
         }
 
         private void Update()
@@ -223,6 +225,24 @@ namespace Match3.InGame.LevelSystems
 
                 DeselectIndex();
             }
+        }
+
+        /// <summary>
+        /// 코루틴을 이용한 카운트다운. 60초가 지나면 마우스의 클릭이 안되게 설정
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator C_Countdown()
+        {
+            int timeout = 60;
+            yield return new WaitForSeconds(4);
+            while (timeout > 0)
+            {
+                _gameoverCounting.text = timeout.ToString();
+                yield return new WaitForSeconds(1);
+                timeout--;
+            }
+            _gameoverCounting.text = "0";
+            EnableInput = false;
         }
 
         IEnumerator C_Init()
