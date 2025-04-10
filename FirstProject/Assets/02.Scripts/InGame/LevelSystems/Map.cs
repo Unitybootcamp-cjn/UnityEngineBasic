@@ -15,6 +15,25 @@ namespace Match3.InGame.LevelSystems
     {
         public bool EnableInput {  get; set; } // 해당 변수가 false일 때는 마우스의 입력을 받지 않도록 하는 변수
 
+        public int Score
+        {
+            get => _score;
+            set
+            {
+                if (_score == value)
+                    return;
+
+                _score = value;
+                OnScoreChanged?.Invoke(Score, _comboStack);
+            }
+        }
+
+        public const int SCORE_PER_BLOCK = 500;
+        public const float POWER_PER_COMBO_STACK = 1.2f;
+        private int _score;
+        private int _comboStack;
+        private int _destroyCount;
+
         [Header("Map spec")]
         [SerializeField] int _sizeX = 8; // 블록의 가로 갯수
         public int SizeX => _sizeX;
@@ -27,6 +46,7 @@ namespace Match3.InGame.LevelSystems
         [SerializeField] Vector3 _bottomCenter;// 블록들을 나열할 곳의 정가운데 가장 밑부분의 벡터. 기준이 되어줌
         public Vector3 BottomCenter => _bottomCenter;
         Node[,] _nodes; // 블록 하나 하나를 저장할 구조체 Node로 만든 2차원배열 변수
+
         // 게임 오브젝트 배열을 시리얼라이즈필드로 선언해서 유니티 인스펙터창에서 게임오브젝트를 받아와서 채움.
         // 만들어놓은 Prefabs에 있는 여러가지 색의 블록들을 시리얼라이즈 필드를 통해 _basicBlocks 변수로 넣음.
         // 그럼 _basicBlocks[0]부터 해당 색깔의 블록이 차지하게됌.
@@ -68,6 +88,7 @@ namespace Match3.InGame.LevelSystems
         bool IsSelected => _selectedIndex.Item1 >= 0 && _selectedIndex.Item2 >= 0;
 
         public event Action<int, int, float, float, Vector3> OnMapCreated;
+        public event Action<int, int> OnScoreChanged;
 
         private void Awake()
         {
@@ -224,13 +245,18 @@ namespace Match3.InGame.LevelSystems
 
         IEnumerator C_MatchAll()
         {
+            _comboStack = 0;
             MatchForAllIndices();
+            yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+            Score += CalcScore();
 
             // 변경된 인덱스가 남지 않을 때 까지 매치 반복
             while (_changedIndices.Count > 0)
             {
-                yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                _comboStack++;
                 MatchForChangedIndices();
+                yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                Score += CalcScore();
             }
         }
 
@@ -272,6 +298,8 @@ namespace Match3.InGame.LevelSystems
             {
                 yield return C_SwapSuccessedAnimation(x1, y1, x2, y2);
 
+                _comboStack = 0;
+
                 // 얘네들 파괴해야하니까 건들지말라고 마킹함   
                 for (int i = 0; i < _matchResults.Count; i++)
                 {
@@ -286,6 +314,7 @@ namespace Match3.InGame.LevelSystems
                     _nodes[y, x].IsScheduledForDestroy = true;
                     _nodes[y, x].Block = null;
                     _nodes[y, x].TypeFlags = NodeTypes.Nothing;
+                    _destroyCount++;
                 }
 
                 _changedIndices.Clear();
@@ -330,11 +359,17 @@ namespace Match3.InGame.LevelSystems
                         StartCoroutine(C_FallingAnimation(block, start, end));
                     }
                 }
+                yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                Score += CalcScore();
+
+
                 // 변경된 인덱스가 남지 않을 때 까지 매치 반복
                 while (_changedIndices.Count > 0)
                 {
-                    yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                    _comboStack++;
                     MatchForChangedIndices();
+                    yield return new WaitUntil(() => _animationCount == 0); // 애니메이션 코루틴 모두 종료될 때 까지 대기
+                    Score += CalcScore();
                 }
                 
             }
@@ -349,8 +384,16 @@ namespace Match3.InGame.LevelSystems
                 StartCoroutine(C_SwapFailedAnimation(x1, y1, x2, y2));
             }
         }
+
+        int CalcScore()
+        {
+            return Mathf.RoundToInt(_destroyCount * Mathf.Pow(_destroyCount, POWER_PER_COMBO_STACK * _comboStack) * SCORE_PER_BLOCK);
+        }
+
         void MatchForAllIndices()
         {
+            _destroyCount = 0;
+
             _matchResults.Clear();
             _changedIndices.Clear();
 
@@ -374,6 +417,7 @@ namespace Match3.InGame.LevelSystems
                             _nodes[y, x].IsScheduledForDestroy = true;
                             _nodes[y, x].Block = null;
                             _nodes[y, x].TypeFlags = NodeTypes.Nothing;
+                            _destroyCount++;
                         }
                         
                     }
@@ -421,6 +465,8 @@ namespace Match3.InGame.LevelSystems
         }
         void MatchForChangedIndices()
         {
+            _destroyCount = 0;
+
             // 복사본 만든 이유는 foreach 구문은 읽기 전용이기 때문에, 순회하는 원본 객체의 데이터가
             // 순회도중 버전이 올라가면(변경사항이 생기면) 예외처리되므로 복사본을 사용하여 순회한다.
             List<(int x, int y)> changedIndicesCopy = new List<(int x, int y)>(_changedIndices);
@@ -445,6 +491,7 @@ namespace Match3.InGame.LevelSystems
                         _nodes[y, x].IsScheduledForDestroy = true;
                         _nodes[y, x].Block = null;
                         _nodes[y, x].TypeFlags = NodeTypes.Nothing;
+                        _destroyCount++;
                     }
                 }
             }
