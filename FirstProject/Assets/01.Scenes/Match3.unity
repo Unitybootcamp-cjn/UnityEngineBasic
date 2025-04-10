@@ -1689,7 +1689,7 @@ MonoBehaviour:
   _oscillationAmplitude: {x: 10, y: 10, z: 10}
   _oscillationVelocity: {x: 10, y: 10, z: 10}
   _swapFailedAnimSpeed: 2
-  _swipeMinDelta: 100
+  _swipeMinDelta: 30
   _startCounting: {fileID: 1044337933}
 --- !u!4 &1790123743
 Transform:
