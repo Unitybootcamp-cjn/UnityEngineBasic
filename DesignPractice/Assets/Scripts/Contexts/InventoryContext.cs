@@ -7,7 +7,7 @@ using System.Text;
 namespace DP.Contexts
 {
     /// <summary>
-    /// ÀÎº¥Åä¸® µ¥ÀÌÅÍ¸¦ ·Îµå / ¼¼ÀÌºê 
+    /// ì¸ë²¤í† ë¦¬ ë°ì´í„°ë¥¼ ë¡œë“œ / ì„¸ì´ë¸Œ 
     /// </summary>
     public class InventoryContext
     {
