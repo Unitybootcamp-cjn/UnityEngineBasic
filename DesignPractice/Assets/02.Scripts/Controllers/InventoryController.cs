@@ -41,7 +41,7 @@ namespace DP.Controllers
         // 이 컴포넌트가 활성화 될 때마다 호출
         private void OnEnable()
         {
-            _rightClick.action.performed += OnRightClick;
+            _rightClick.action.performed += OnRightClick; 
             _rightClick.action.Enable();
         }
 
