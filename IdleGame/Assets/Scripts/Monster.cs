@@ -38,7 +38,7 @@ public class Monster : MonoBehaviour
         while(percent < 1.0f)
         {
             current += Time.deltaTime;
-            percent = current / 3.0f;
+            percent = current / 2.0f;
 
             // start에서 end 지점까지 percent 간격으로 이동해라.
             var pos = Mathf.Lerp(start, end, percent);
@@ -70,7 +70,7 @@ public class Monster : MonoBehaviour
 
         var distance = Vector3.Distance(transform.position, Vector3.zero); // 현재 위치와 영점사이의 거리 측정
         // 설정한 기준보다 측정 거리가 작으면
-        if(distance <= 0.5f)
+        if(distance <= 0.3f)
         {
             SetAnimator("isIDLE"); // 대기하는 애니메이션으로 변경.
         }
