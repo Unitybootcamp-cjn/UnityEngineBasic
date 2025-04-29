@@ -1,48 +1,48 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
-// ÄÄÆ÷³ÍÆ®(Component)
-// À¯´ÏÆ¼ ¿ÀºêÁ§Æ®°¡ »ç¿ëÇÒ ±â´É
-// Á¦°øµÇ´Â ÄÄÆ÷³ÍÆ®°¡ ÀÖ°í,
-// ½ºÅ©¸³Æ®ÀÇ °æ¿ì´Â »ç¿ëÀÚ°¡ ¸¸µé¾îÁÖ´Â »ç¿ëÀÚ Á¤ÀÇ ÄÄÆ÷³ÍÆ®·Î½á È°¿ëÀÌ °¡´ÉÇÏ´Ù.(Mono »ó¼Ó)
+//ì»´í¬ë„ŒíŠ¸(Component)
+//ìœ ë‹ˆí‹° ì˜¤ë¸Œì íŠ¸ê°€ ì‚¬ìš©í•  ê¸°ëŠ¥
+//ì œê³µë˜ëŠ” ì»´í¬ë„ŒíŠ¸ê°€ ìˆê³ , ìŠ¤í¬ë¦½íŠ¸ì˜ ê²½ìš°ëŠ” ì‚¬ìš©ìê°€ ë§Œë“¤ì–´ì£¼ëŠ” ì‚¬ìš©ì ì •ì˜
+//ì»´í¬ë„ŒíŠ¸ë¡œì¨ í™œìš©ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.(Mono ìƒì†)
 
-// Monobehavior »ó¼Ó
-// 1. À¯´ÏÆ¼ ¿ÀºêÁ§Æ®¿¡ ÇØ´ç Å¬·¡½º¸¦ ÄÄÆ÷³ÍÆ®·Î½á µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.
-
-// ¸ó½ºÅÍ Å¬·¡½º¿¡¼­ »óÈ²¿¡ ¸Â°Ô ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ½ÇÇà½ÃÅ°·Á ÇÕ´Ï´Ù.
-// ÀÌ¶§ ÇÊ¿äÇÑ µ¥ÀÌÅÍ´Â ¹«¾ùÀÏ±î¿ä? 2
-// 1. Animation
-// 2. Animator
-
+//MonoBehavior ìƒì†
+//1. ìœ ë‹ˆí‹° ì˜¤ë¸Œì íŠ¸ì— í•´ë‹¹ í´ë˜ìŠ¤ë¥¼ ì»´í¬ë„ŒíŠ¸ë¡œì¨ ë“±ë¡í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 public class Monster : Unit
 {
-    // Range¶õ À¯´ÏÆ¼ ÀÎ½ºÆåÅÍ¿¡ ÇØ´ç ÇÊµå °ª¿¡ ´ëÇÑ ¹üÀ§ ¼³Á¤
-    [Range(1,5)] public float speed;
+    //ìœ ë‹ˆí‹° ì¸ìŠ¤í™í„°ì— í•´ë‹¹ í•„ë“œ ê°’ì— ëŒ€í•œ ë²”ìœ„ ì„¤ì •
+    [Range(1, 5)] public float speed;
+    //ëª¬ìŠ¤í„° í´ë˜ìŠ¤ì—ì„œ ìƒí™©ì— ë§ê²Œ ì• ë‹ˆë©”ì´ì…˜ì„ ì‹¤í–‰ì‹œí‚¤ë ¤ í•©ë‹ˆë‹¤.
+    //ì´ë•Œ í•„ìš”í•œ ë°ì´í„°ëŠ” ë¬´ì—‡ì¼ê¹Œìš”? 2
+    //1. Animation
+    //2. Animator
+
+    bool isSpawn = false; //ìƒì„± ì—¬ë¶€
+    bool isDead = false; //ì‚´ì•˜ëŠ”ì§€ ì£½ì—ˆëŠ”ì§€ì˜ ì—¬ë¶€
 
 
-    bool isSpawn = false; // »ı¼º ¿©ºÎ
-
-    // ¸ó½ºÅÍ°¡ »ı¼ºµÆÀ» ¶§ ÁøÇàÇÒ ÀÛ¾÷(¿¬Ãâ)
-    // ¼­¼­È÷ Ä¿Áö´Â ´À³¦
+    //ëª¬ìŠ¤í„°ê°€ ìƒì„±ëì„ ë•Œ ì§„í–‰í•  ì‘ì—…(ì—°ì¶œ)
+    //ì„œì„œíˆ ì»¤ì§€ëŠ” ëŠë‚Œ
     IEnumerator OnSpawn()
     {
-        float current = 0.0f; // ÇÁ·¹ÀÓ °ª ÀúÀå¿ë
-        float percent = 0.0f; // ÃÖ´ë 1, ¹İº¹¹®ÀÇ Á¾·á Á¶°Ç
-        float start = 0.0f; // º¯È­ ½ÃÀÛ °ª
-        float end = transform.localScale.x; // º¯È­ ¸¶Áö¸·°ª
-        // localScaleÀº °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ »ó´ëÀûÀÎ Å©±â¸¦ ÀÇ¹ÌÇÕ´Ï´Ù.
-        // ÇöÀç´Â ¿ÀºêÁ§Æ®ÀÇ Å©±â·Î ±â¾ïÇÕ´Ï´Ù.
+        float current = 0.0f; //í”„ë ˆì„ ê°’ ì €ì¥ìš©
+        float percent = 0.0f; //ë°˜ë³µë¬¸ì˜ ì¢…ë£Œ ì¡°ê±´
+        float start = 0.0f;  //ë³€í™” ì‹œì‘ ê°’
+        float end = transform.localScale.x; //ë³€í™” ë§ˆì§€ë§‰ ê°’
 
-        while(percent < 1.0f)
+        //localScaleì€ ê²Œì„ ì˜¤ë¸Œì íŠ¸ì˜ ìƒëŒ€ì ì¸ í¬ê¸°ë¥¼ ì˜ë¯¸í•©ë‹ˆë‹¤.
+        //í˜„ì¬ëŠ” ì˜¤ë¸Œì íŠ¸ì˜ í¬ê¸°ë¡œ ê¸°ì–µí•©ë‹ˆë‹¤.
+        while (percent < 1.0f)
         {
             current += Time.deltaTime;
-            percent = current / 2.0f;
+            percent = current / 3.0f;
 
-            // start¿¡¼­ end ÁöÁ¡±îÁö percent °£°İÀ¸·Î ÀÌµ¿ÇØ¶ó.
+            //startì—ì„œ end ì§€ì ê¹Œì§€ percent ê°„ê²©ìœ¼ë¡œ ì´ë™í•´ë¼.
             var pos = Mathf.Lerp(start, end, percent);
-            // °è»êÇÑ ¼öÄ¡¸¸Å­ ½ºÄÉÀÏ(Å©±â)¸¦ Àû¿ëÇÕ´Ï´Ù.
+
+            //ê³„ì‚°í•œ ìˆ˜ì¹˜ë§Œí¼ ìŠ¤ì¼€ì¼(í¬ê¸°)ë¥¼ ì ìš©í•©ë‹ˆë‹¤.
             transform.localScale = new Vector3(pos, pos, pos);
-            // Å»ÃâÇß´Ù°¡ µ¹¾Æ¿É´Ï´Ù.
+            //íƒˆì¶œí–ˆë‹¤ê°€ ëŒì•„ì˜µë‹ˆë‹¤.
             yield return null;
         }
         yield return new WaitForSeconds(0.5f);
@@ -51,83 +51,108 @@ public class Monster : Unit
 
     protected override void Start()
     {
-        base.Start(); // UnitÀÇ (ºÎ¸ğÀÇ) Start È£Ãâ
-        // ¾Æ·¡¿¡ Monster°¡ ½ÇÇàÇÒ Start ÀÛ¾÷ ±¸Çö
+        base.Start(); //Unitì˜ Start í˜¸ì¶œ
+        //Monsterê°€ ì‹¤í–‰í•  Start ì‘ì—… êµ¬í˜„
         //MonsterInit();
 
-        // ±âº» Ã¼·ÂÀº 5·Î ¼³Á¤ÇÑ´Ù.
+        //ê¸°ë³¸ ì²´ë ¥ì€ 5ë¡œ ì„¤ì •í•œë‹¤.
         HP = 5.0f;
-        GetDamage(5.0f);
     }
 
 
-    public GameObject effect; // ÀÌÆåÆ® ¿¬°á
+    public GameObject effect; //ì´í™íŠ¸ ì—°ê²°
+
 
     public void GetDamage(double dmg)
     {
-        HP -= dmg; // À¯´ÖÀÇ Ã¼·ÂÀ» µ¥¹ÌÁö¸¸Å­ ±ğ´Â´Ù.
+        //ì£½ì—ˆë‹¤ë©´ ì´ ì‘ì—…ì´ í˜¸ì¶œë˜ì§€ ì•Šê²Œ í•©ë‹ˆë‹¤.
+        if (isDead) return;
 
-        if(HP <= 0)
+        //HitText ì²˜ë¦¬
+        Manager.Pool.pooling("Hit").get((value) =>
         {
-            var eff = Resources.Load<GameObject>(effect.name);
-            // µî·ÏÇÑ ÀÌÆåÆ®ÀÇ ÀÌ¸§À¸·Î ·ÎµåÇÑ´Ù.
-            Instantiate(eff, transform.position, Quaternion.identity);
-            // ·ÎµåÇÑ °ªÀ» »ı¼ºÇÑ´Ù.
+            value.GetComponent<HitText>().Init(transform.position, dmg);
+        });
 
-            // ÀÌÆåÆ®¸¦ ¸ó½ºÅÍÀÇ ÁÂÇ¥ À§Ä¡·Î »ı¼º
-            //var effect = Manager.Pool.pooling("Effect01").get(
-            //    (value) =>
-            //    {
-            //        value.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            //    });
+
+        HP -= dmg;//ìœ ë‹›ì˜ ì²´ë ¥ì„ ë°ë¯¸ì§€ë§Œí¼ ê¹ëŠ”ë‹¤.
+
+        if (HP <= 0)
+        {
+            //var eff = Resources.Load<GameObject>(effect.name);
+            //ë“±ë¡í•œ ì´í™íŠ¸ì˜ ì´ë¦„ìœ¼ë¡œ ë¡œë“œí•œë‹¤.
+            //Instantiate(eff, transform.position, Quaternion.identity);
+            //ë¡œë“œí•œ ê°’ì„ ìƒì„±í•œë‹¤.
+
+            //ì´í™íŠ¸ë¥¼ ëª¬ìŠ¤í„°ì˜ ì¢Œí‘œ ìœ„ì¹˜ë¡œ ìƒì„±
+            var effect = Manager.Pool.pooling("Effect01").get(
+                (value) =>
+                {
+                    value.transform.position = new Vector3(transform.position.x,
+                        transform.position.y, transform.position.z);
+                });
+
+            //ì½”ì¸ ë“œë ê¸°ëŠ¥ ì¶”ê°€
+            Manager.Pool.pooling("Coin_Move").get(value =>
+            {
+                value.GetComponent<CoinMove>().Init(transform.position);
+            });
+
         }
     }
 
-        
+
     public void MonsterInit() => StartCoroutine(OnSpawn());
 
 
-    // À¯´ÏÆ¼ ¶óÀÌÇÁ »çÀÌÅ¬ ÇÔ¼ö
+    //ìœ ë‹ˆí‹° ë¼ì´í”„ ì‹¸ì´í´ í•¨ìˆ˜
     private void Update()
     {
-        if(isSpawn == false)
-            return;
+        transform.LookAt(Vector3.zero);
 
-        transform.LookAt(Vector3.zero); // ¿µÁ¡À» ¹Ù¶óº¸±â
-
-        var distance = Vector3.Distance(transform.position, Vector3.zero); // ÇöÀç À§Ä¡¿Í ¿µÁ¡»çÀÌÀÇ °Å¸® ÃøÁ¤
-        // ¼³Á¤ÇÑ ±âÁØº¸´Ù ÃøÁ¤ °Å¸®°¡ ÀÛÀ¸¸é
-        if(distance <= 0.3f)
+        if (isSpawn == false)
         {
-            SetAnimator("isIDLE"); // ´ë±âÇÏ´Â ¾Ö´Ï¸ŞÀÌ¼ÇÀ¸·Î º¯°æ.
+            return;
+        }
+
+        var distance = Vector3.Distance(transform.position, Vector3.zero);
+        //ì„¤ì •í•œ ê¸°ì¤€ë³´ë‹¤ ì¸¡ì • ê±°ë¦¬ê°€ ì‘ìœ¼ë©´
+        if (distance <= 0.5f)
+        {
+            SetAnimator("isIDLE"); //ëŒ€ê¸°ëª¨ë“œë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, Time.deltaTime * speed); // ¿µÁ¡À» ÇâÇØ ÀÌµ¿
-            SetAnimator("isMOVE"); // ¿òÁ÷ÀÌ´Â ¾Ö´Ï¸ŞÀÌ¼ÇÀ¸·Î º¯°æ.
+            transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, Time.deltaTime * speed);
+            SetAnimator("isMOVE"); //ì´ë™ ëª¨ë“œë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
         }
-        #region ÇÊ±â
-        // 1. transform.position : ÇöÀç ¿ÀºêÁ§Æ®ÀÇ À§Ä¡¸¦ ³ªÅ¸³½´Ù.
-        // 2. Vector3 : 3D È¯°æÀÇ ÁÂÇ¥°è (X,Y,Z Ãà) ±¸¼º
-        // 3. MoveTowards(start, end, speed); startºÎÅÍ endÁöÁ¡±îÁö speed ¼öÄ¡¸¸Å­ ÀÌµ¿ÇÕ´Ï´Ù.
-        // 4. Time.deltaTime : ÀÌÀü ÇÁ·¹ÀÓÀÌ ¿Ï·áµÇ±â±îÁö °É¸° ½Ã°£
-        //                     (ÄÄÇ»ÅÍÀÇ ¼º´ÉÀÌ ´À¸±¼ö·Ï °ªÀÌ Ä¿Áü)
-        //                     ÀÏ¹İÀûÀ¸·Î ¾à 1ÃÊ
-        //                     ¾÷µ¥ÀÌÆ®¿¡¼­ ÀÛ¾÷À» ÇÏ´Âµ¥¿¡ ÀÖ¾î º¸Á¤°ª ¿ªÇÒÀ» ÇÔ
-        // Debug.Log(Time.deltaTime); // Âï¾îº¸¸é 0.005 Á¤µµÀÇ ¼ıÀÚ°¡ °è¼Ó ³ª¿È
-        // 5. transform.LookAt(Vector3 position) : Æ¯Á¤ ¹æÇâÀ» ¹Ù¶óº¸°Ô ¼³Á¤ÇØÁÖ´Â ±â´É
+
+        //ê³µê²© í…ŒìŠ¤íŠ¸
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            GetDamage(1);
+        }
+
+        #region í•„ê¸°
+        //1. transform.position : í˜„ì¬ ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ë¥¼ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
+        //2. Vector3 : 3D í™˜ê²½ì˜ ì¢Œí‘œê³„ (X,Y,Z ì¶•) êµ¬ì„±
+        //3. MoveTowards(start, end, speed); startë¶€í„° end ì§€ì ê¹Œì§€ speed ìˆ˜ì¹˜ë§Œí¼ ì´ë™í•©ë‹ˆë‹¤.
+        //4. Time.deltaTime : ì´ì „ í”„ë ˆì„ì´ ì™„ë£Œë˜ê¸°ê¹Œì§€ ê±¸ë¦° ì‹œê°„
+        //                    (ì»´í“¨í„°ì˜ ì„±ëŠ¥ì´ ëŠë¦´ìˆ˜ë¡ ê°’ì´ ì»¤ì§)
+        //                    ì¼ë°˜ì ìœ¼ë¡œ ì•½ 1ì´ˆ
+        //                    ì—…ë°ì´íŠ¸ì—ì„œ ì‘ì—…ì„ í•˜ëŠ”ë° ì‡ì–´ì„œì˜ ë³´ì • ê°’ ì—­í• 
+        //5. trasnform.LookAt(Vector3 posotion) : íŠ¹ì • ë°©í–¥ì„ ë°”ë¼ë³´ê²Œ ì„¤ì •í•´ì£¼ëŠ” ê¸°ëŠ¥
 
 
-        // ¹æÇâ º¤ÅÍ : ±âº»ÀûÀ¸·Î Á¦°øÇØÁÖ´Â Vector °ª
-        // Vector3.right == new Vector3(1,0,0);
-        // Vector3.left == new Vector3(-1,0,0);
-        // Vector3.up == new Vector3(0,1,0);
-        // Vector3.down == new Vector3(0,-1,0);
-        // Vector3.forward == new Vector3(0,0,1);
-        // Vector3.back == new Vector3(0,0,-1);
-        // Vector3.zero == new Vector3(0,0,0);
-        // Vector3.one == new Vector3(1,1,1);
+        //ë°©í–¥ ë²¡í„° : ê¸°ë³¸ì ìœ¼ë¡œ ì œê³µí•´ì£¼ëŠ” Vector ê°’
+        //Vector3.right == new Vector3(1,0,0);
+        //Vector3.left  == new Vector3(-1,0,0);
+        //Vector3.up    == new Vector3(0,1,0);
+        //Vector3.down  == new Vector3(0,-1,0);
+        //Vector3.forward == new Vector3(0,0,1);
+        //Vector3.back    == new Vector3(0,0,-1);
+        //Vector3.zero    == new Vector3(0,0,0);
+        //Vector3.one     == new Vector3(1,1,1);
         #endregion
     }
-
 }
