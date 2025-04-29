@@ -129,7 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 150
-  speed: 5
+  speed: 300
+  item_move_speed: 10
 --- !u!1 &5246941393248645314
 GameObject:
   m_ObjectHideFlags: 0
