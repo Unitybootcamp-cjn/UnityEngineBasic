@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,12 +34,13 @@ public class HitText : MonoBehaviour
         transform.parent = B_Canvas.instance.GetLayer(1);
 
         //일정 시간 뒤에 반납을 진행
-        //Release();
+        StartCoroutine(Release());
     }
 
     //피격 텍스트 반납 코드
-    private void Release()
+    IEnumerator Release()
     {
+        yield return new WaitForSeconds(1.0f);
         Manager.Pool.pool_dict["Hit"].Release(gameObject);
     }
 
