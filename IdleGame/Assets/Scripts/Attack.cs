@@ -11,7 +11,7 @@ public class Attack : MonoBehaviour
     public Vector3 target_pos;
     double damage;
     public string attack_key;
-    public bool hit = false;
+    bool hit = false;
 
     // 공격 시 생성될 오브젝트
     Dictionary<string, GameObject> attacks = new Dictionary<string, GameObject>();

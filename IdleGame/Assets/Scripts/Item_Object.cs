@@ -7,9 +7,9 @@ public class Item_Object : MonoBehaviour
     public Transform ItemText;
     public Text text;
 
-    public float angle = 45.0f;
-    public float gravity = 9.8f;
-    public float range = 2.0f;
+    float angle = 45.0f;
+    float gravity = 9.8f;
+    float range = 2.0f;
 
     bool ischeck = false;
 
