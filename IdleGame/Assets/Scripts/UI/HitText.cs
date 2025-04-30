@@ -12,11 +12,6 @@ public class HitText : MonoBehaviour
     float up = 1.0f;
 
 
-    private void Start()
-    {
-
-    }
-
     private void Update()
     {
         var pos = new Vector3(target.x, target.y + up, target.z);
@@ -35,7 +30,7 @@ public class HitText : MonoBehaviour
         target = pos;
         message.text = value.ToString();
         //해당 cs 파일을 가진 UI를 B_Canvas(기본 캔버스)
-        transform.parent = B_Canvas.instance.transform;
+        transform.parent = B_Canvas.instance.GetLayer(1);
 
         //일정 시간 뒤에 반납을 진행
         //Release();

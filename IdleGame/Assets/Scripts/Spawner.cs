@@ -69,7 +69,7 @@ public class Spawner : MonoBehaviour
 
     IEnumerator CRelease(GameObject obj)
     {
-        //1초 대기
+        //5초 대기
         yield return new WaitForSeconds(5.0f);
 
         Manager.Pool.pool_dict["Monster"].Release(obj);

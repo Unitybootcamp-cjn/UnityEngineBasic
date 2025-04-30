@@ -14,7 +14,7 @@ public class ObjectPool : IPool
         //action으로 실행할 기능이 있다면?
         if (action != null)
         {
-            action.Invoke(obj);
+            action?.Invoke(obj);
             //Invoke를 통해 해당 함수를 실행시키는 것이 가능합니다.
         }
         return obj;
@@ -27,7 +27,7 @@ public class ObjectPool : IPool
         obj.SetActive(false); //비활성화
         if (action != null)
         {
-            action.Invoke(obj);
+            action?.Invoke(obj);
             //Invoke를 통해 해당 함수를 실행시키는 것이 가능합니다.
         }
     }
