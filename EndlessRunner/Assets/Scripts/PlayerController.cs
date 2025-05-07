@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
         {
             vertical_velocity = 0.0f;
             // 점프 기능 추가
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !isJumping())
             {
                 vertical_velocity = jump;
                 SetAnimator("isJump");
@@ -73,7 +73,6 @@ public class PlayerController : MonoBehaviour
         if(temp == "isJump")
         {
             animator.SetTrigger("isJump");
-
             return;
         }
         if(temp == "isSlide")
@@ -82,5 +81,10 @@ public class PlayerController : MonoBehaviour
             return;
         }
         animator.SetBool("isRun", true);
+    }
+
+    bool isJumping()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("isJump");
     }
 }
