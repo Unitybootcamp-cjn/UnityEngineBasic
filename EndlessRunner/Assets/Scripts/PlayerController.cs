@@ -3,15 +3,19 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     CharacterController controller; //컴포넌트
+    Animator animator;
 
-    [SerializeField] private Vector3 moveVector; //방향 벡터
-    [SerializeField] private float speed = 5.0f; //플레이어의 이동 속도
-    [SerializeField] private float vertical_velocity = 0.0f; // 점프를 위한 수직 속도
-    [SerializeField] private float gravity = 12.0f; // 중력 값
+    private Vector3 moveVector; //방향 벡터
+    private float vertical_velocity = 0.0f; // 점프를 위한 수직 속도
+    private float gravity = 12.0f; // 중력 값
+
+    [SerializeField] private float speed = 5.0f; // 플레이어의 이동 속도
+    [SerializeField] private float jump = 3.0f; // 플레이어의 점프 수치
 
     void Start()
     {
         controller = GetComponent<CharacterController>();    
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -30,6 +34,20 @@ public class PlayerController : MonoBehaviour
         if (controller.isGrounded)
         {
             vertical_velocity = 0.0f;
+            // 점프 기능 추가
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                vertical_velocity = jump;
+                SetAnimator("isJump");
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                SetAnimator("isSlide");
+            }
+            else
+            {
+                SetAnimator("isRun");
+            }
         }
         else
         {
@@ -48,5 +66,21 @@ public class PlayerController : MonoBehaviour
 
         // 설정한 방향대로 이동 진행
         controller.Move(moveVector * Time.deltaTime);
+    }
+
+    private void SetAnimator(string temp)
+    {
+        if(temp == "isJump")
+        {
+            animator.SetTrigger("isJump");
+
+            return;
+        }
+        if(temp == "isSlide")
+        {
+            animator.SetTrigger("isSlide");
+            return;
+        }
+        animator.SetBool("isRun", true);
     }
 }
