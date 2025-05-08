@@ -14,7 +14,7 @@ public class TileManager : MonoBehaviour
     private float spawnZ = 0.0f; // 스폰(Z축)
     private float tileLength = 6.0f; // 타일의 길이
     private float passZone = 15.0f; // 타일 유지 거리 
-    private int tile_on_screen = 7; // 화면에 배치할 타일 개수
+    private int tile_on_screen = 10; // 화면에 배치할 타일 개수
 
     void Start()
     {

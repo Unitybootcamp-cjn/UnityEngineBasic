@@ -10,7 +10,15 @@ public class PlayerController : MonoBehaviour
     private float gravity = 12.0f; // 중력 값
 
     [SerializeField] private float speed = 5.0f; // 플레이어의 이동 속도
-    [SerializeField] private float jump = 3.0f; // 플레이어의 점프 수치
+    [SerializeField] private float jump = 10.0f; // 플레이어의 점프 수치
+
+
+    public void SetSpeed(float level)
+    {
+        speed += level;
+    }
+
+    public float GetSpeed() => speed;
 
     void Start()
     {
