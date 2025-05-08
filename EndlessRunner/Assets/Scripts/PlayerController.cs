@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,6 +7,9 @@ public class PlayerController : MonoBehaviour
     CharacterController controller; //컴포넌트
     public ScoreManager scoreManager; //스코어 매니저
     Animator animator;
+
+    //public float invincibleDuration = 1f;    // 무적 지속 시간 (초)
+    //private bool isInvincible = false;       // 무적 중인지 여부
 
     private Vector3 moveVector; //방향 벡터
     private float vertical_velocity = 0.0f; // 점프를 위한 수직 속도
@@ -94,9 +98,12 @@ public class PlayerController : MonoBehaviour
         }
         if (hit.transform.tag == "Obstacle")
         {
+            //if (isInvincible) return;
             speed -= 1;
+            //StartCoroutine(InvincibleCoroutine());
             Destroy(hit.gameObject);
             scoreManager.SetTMP_Text();
+
         }
     }
 
@@ -106,6 +113,13 @@ public class PlayerController : MonoBehaviour
         isDead = true;
     }
 
+    //private IEnumerator InvincibleCoroutine()
+    //{
+    //    isInvincible = true;
+
+    //    yield return new WaitForSeconds(invincibleDuration);
+    //    isInvincible = false;
+    //}
 
     private void SetAnimator(string temp)
     {
