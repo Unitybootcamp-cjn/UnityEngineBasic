@@ -1,14 +1,17 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     CharacterController controller; //컴포넌트
+    public ScoreManager scoreManager; //스코어 매니저
     Animator animator;
 
     private Vector3 moveVector; //방향 벡터
     private float vertical_velocity = 0.0f; // 점프를 위한 수직 속도
     private float gravity = 12.0f; // 중력 값
 
+    [SerializeField] private bool isDead = false; //일반적으론 살아있는 상태
     [SerializeField] private float speed = 5.0f; // 플레이어의 이동 속도
     [SerializeField] private float jump = 10.0f; // 플레이어의 점프 수치
 
@@ -35,6 +38,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        // 죽은 상태일 경우 Update 작업 x
+        if (isDead)
+            return;
 
         moveVector = Vector3.zero; // 방향 벡터 값 리셋
 
@@ -76,6 +82,31 @@ public class PlayerController : MonoBehaviour
         controller.Move(moveVector * Time.deltaTime);
     }
 
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.transform.tag == "Boss")
+        {
+            //충돌하면 바로 죽는 이벤트로 진행
+            OnDeath();
+            scoreManager.OnDead();
+            SetAnimator("isDead");
+        }
+        if (hit.transform.tag == "Obstacle")
+        {
+            speed -= 1;
+            Destroy(hit.gameObject);
+            scoreManager.SetTMP_Text();
+        }
+    }
+
+
+    private void OnDeath()
+    {
+        isDead = true;
+    }
+
+
     private void SetAnimator(string temp)
     {
         if(temp == "isJump")
@@ -86,6 +117,11 @@ public class PlayerController : MonoBehaviour
         if(temp == "isSlide")
         {
             animator.SetTrigger("isSlide");
+            return;
+        }
+        if (temp == "isDead")
+        {
+            animator.SetTrigger("isDead");
             return;
         }
         animator.SetBool("isRun", true);
