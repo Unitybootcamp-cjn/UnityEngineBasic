@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,6 @@ public class SliderDistance : MonoBehaviour
     public Slider dangerBar;
 
     public float warningDistance = 20f;
-    public GameObject warningUI;
     public TextMeshProUGUI distanceText;
 
     void Update()
@@ -34,8 +32,9 @@ public class SliderDistance : MonoBehaviour
         distanceText.text = ((int)dist).ToString();
 
         if (dist <= warningDistance && !playerController.isDead)
-            warningUI.SetActive(true);
-        else
-            warningUI.SetActive(false);
+        {
+            FindObjectOfType<CameraController>().TriggerShake();
+            FindObjectOfType<ScreenFlash>().Flash();
+        }
     }
 }

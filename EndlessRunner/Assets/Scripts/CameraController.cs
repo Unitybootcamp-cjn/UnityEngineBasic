@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -10,6 +11,13 @@ public class CameraController : MonoBehaviour
     public static float camera_animate_duration = 3.0f; // 카메라를 이용해서 애니메이션 연출할 때 쓸 지속 시간
     public Vector3 animate_offset = new Vector3(0, 5, 5); // 애니메이션을 위한 시작 오프셋
 
+    public float shakeDuration = 0.5f;
+    public float shakeMagnitude = 0.1f;
+
+    private Vector3 originalPos;
+    private bool isShaking = false;
+    Vector3 shakeOffset = Vector3.zero;
+
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
@@ -18,28 +26,53 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        moveVector = target.position + camera_offset;   // 타겟 + 카메라 오프셋으로 방향 설정
-        moveVector.x = 0;                               // 카메라 X축 고정(좌우 이동 안함)
-        moveVector.y = Mathf.Clamp(moveVector.y, 3, 5); // 카메라 Y축 고정(3 ~ 5 사이의 값으로 제한
+        moveVector = target.position + camera_offset;
+        moveVector.x = 0;
+        moveVector.y = Mathf.Clamp(moveVector.y, 3, 5);
 
+        Vector3 finalPosition;
 
-        if(transition > 1.0f)
+        if (transition > 1.0f)
         {
-            transform.position = moveVector;
+            finalPosition = moveVector;
         }
         else
         {
-            // 전환이 진행되고 있는 상태일 때 진행할 작업
-            // Vector3.Lerp(Vector a, Vector b, flaot t);
-            // a부터 b까지 t 간격으로 서서히 이동하는 명령문(선형 보간)
-            transform.position = Vector3.Lerp(moveVector + animate_offset, moveVector, transition);
-            // 오프셋 적용 위치에서 플레이어의 방향까지 보간 이동을 진행함.
-
+            finalPosition = Vector3.Lerp(moveVector + animate_offset, moveVector, transition);
             transition += Time.deltaTime / camera_animate_duration;
-            // 전환 값을 서서히 증가 시킵니다.(프레임 시간 / 애니메이션 시간)
-
             transform.LookAt(target.position + Vector3.up);
-            // 위를 쳐다보게 설계합니다.
         }
+
+        // 흔들림이 있으면 적용
+        finalPosition += shakeOffset;
+
+        transform.position = finalPosition;
+    }
+
+
+    public void TriggerShake()
+    {
+        if (!isShaking)
+            StartCoroutine(Shake());
+    }
+
+    IEnumerator Shake()
+    {
+        isShaking = true;
+        float elapsed = 0.0f;
+
+        while (elapsed < shakeDuration)
+        {
+            float x = Random.Range(-1f, 1f) * shakeMagnitude;
+            float y = Random.Range(-1f, 1f) * shakeMagnitude;
+
+            shakeOffset = new Vector3(x, y, 0);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        shakeOffset = Vector3.zero;
+        isShaking = false;
     }
 }
