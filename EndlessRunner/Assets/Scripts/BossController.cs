@@ -21,7 +21,7 @@ public class BossController : MonoBehaviour
         speed += level + 0.2f;
         // 게임 후반부에 진입 시 난이도 상승
         if (speed >= 14)
-            speed += 2;
+            speed += 1;
     }
 
     public float GetSpeed() => speed;

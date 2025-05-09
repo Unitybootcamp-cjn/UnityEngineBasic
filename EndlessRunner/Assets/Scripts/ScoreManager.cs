@@ -29,7 +29,7 @@ public class ScoreManager : MonoBehaviour
 
     //   2-5. CSV         : 엑셀 파일에 필요한 데이터들을 나열해두고, C# 스크립트를 통해 해당 값을 얻어와서
     //                      적용합니다. 주로 맵 패턴 , 스크립트 대화 호출, 기본적인 데이터
-    private float score = 0.0f;
+    public float score = 0.0f;
 
     //점수에 따른 난이도 표현
     private int level = 1;
@@ -38,7 +38,7 @@ public class ScoreManager : MonoBehaviour
     private int max_level = 10;
 
     //레벨 당 요구 점수
-    private int levelperscore = 10;
+    private int levelperscore = 200;
 
     //텍스트 UI
     public TMP_Text scoreText;
@@ -91,7 +91,7 @@ public class ScoreManager : MonoBehaviour
             LevelUP();
         }
 
-        score += 3 * Time.deltaTime;
+        score += 30 * Time.deltaTime;
 
         scoreText.text = ((int)score).ToString();
 

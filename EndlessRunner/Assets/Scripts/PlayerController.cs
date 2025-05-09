@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public ScoreManager scoreManager; //스코어 매니저
     Animator animator;
     Renderer[] renderers;
+    public TextMeshProUGUI Plus100Text;
+    public TextMeshProUGUI Minus100Text;
 
     private Vector3 moveVector; //방향 벡터
     private float vertical_velocity = 0.0f; // 점프를 위한 수직 속도
@@ -34,6 +38,8 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();    
         animator = GetComponent<Animator>();
         renderers = GetComponentsInChildren<Renderer>();
+        Plus100Text.text = "";
+        Minus100Text.text = "";
     }
 
     void Update()
@@ -81,7 +87,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //1. 좌우 이동
-        moveVector.x = Input.GetAxisRaw("Horizontal") * speed;
+        moveVector.x = Input.GetAxisRaw("Horizontal") * speed / 2;
         //2. 점프 관련
         moveVector.y = vertical_velocity;
         //3. 앞으로 이동
@@ -111,15 +117,18 @@ public class PlayerController : MonoBehaviour
         if (hit.transform.tag == "Obstacle" && !isStopped)
         {
             Destroy(hit.gameObject);
+            scoreManager.score -= 100;
             scoreManager.SetTMP_Text();
             StartCoroutine(StopAndResume());
             StartCoroutine(FlickerAll());
-
+            StartCoroutine(Minus100());
         }
         if (hit.transform.tag == "Boost" && !isStopped)
         {
+            scoreManager.score += 100;
             Destroy(hit.gameObject);
             StartCoroutine(Boost());
+            StartCoroutine(Plus100());
         }
     }
     private IEnumerator StopAndResume()
@@ -149,6 +158,19 @@ public class PlayerController : MonoBehaviour
         isDead = true;
     }
     
+    IEnumerator Plus100()
+    {
+        Plus100Text.text = "+100";
+        yield return new WaitForSeconds(1.0f);
+        Plus100Text.text = "";
+    }
+    IEnumerator Minus100()
+    {
+        Minus100Text.text = "-100";
+        yield return new WaitForSeconds(1.0f);
+        Minus100Text.text = "";
+    }
+
 
     IEnumerator FlickerAll()
     {
