@@ -91,7 +91,7 @@ public class ScoreManager : MonoBehaviour
             LevelUP();
         }
 
-        score += Time.deltaTime;
+        score += 3 * Time.deltaTime;
 
         scoreText.text = ((int)score).ToString();
 
@@ -101,7 +101,7 @@ public class ScoreManager : MonoBehaviour
             //해당 코드를 사용하면 계속 프립스 값이 설정되기 때문에 연출로 보여주고, Dead에서 설정 1번으로 처리
             //PlayerPrefs.SetInt("HIGH_SCORE", (int)score);
             //HighScore.text = $"High Score : {PlayerPrefs.GetInt("HIGH_SCORE")}"; 
-            HighScore.text = ((int)score).ToString();
+            HighScore.text = $"High Score : " + ((int)score).ToString();
         }
 
     }
@@ -110,16 +110,16 @@ public class ScoreManager : MonoBehaviour
         if (level == max_level)
             return;
 
-        levelperscore *= 3;
+        levelperscore *= 2;
         level++;
-        playerController.SetSpeed(level);
-        bossController.SetSpeed(level);
+        playerController.SetSpeed(2);
+        bossController.SetSpeed(2);
         SetTMP_Text();
     }
     public void SetTMP_Text()
     {
-        levelText.text = $"level :  {level}";
-        perScoreText.text = $"Goal : {levelperscore: #,##0}";
+        levelText.text = $"Level :  {level}";
+        perScoreText.text = $"Next Level : {levelperscore: #,##0}";
         Player_Speed.text = $"Speed : {playerController.GetSpeed()}";
     }
 

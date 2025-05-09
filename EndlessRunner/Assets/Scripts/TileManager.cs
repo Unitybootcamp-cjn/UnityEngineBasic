@@ -21,13 +21,14 @@ public class TileManager : MonoBehaviour
     private float tileLength = 6.0f; // 타일의 길이
     private float fenceLength = 20.0f; // 펜스의 길이
 
-    private float passZone = 100.0f; // 타일 유지 거리 
+    private float passZone = 150.0f; // 타일 유지 거리 
 
-    private int tile_on_screen = 20; // 화면에 배치할 타일 개수
-    private int fence_on_screen = 5;
+    private int tile_on_screen = 50; // 화면에 배치할 타일 개수
+    private int fence_on_screen = 30;
 
     private Queue<GameObject> fenceQueue = new Queue<GameObject>();
-    private int lastSpawnCount;
+    private Queue<int> lastSpawnCount = new Queue<int>();
+    //private int lastSpawnCount;
 
 
     void Start()
@@ -57,7 +58,7 @@ public class TileManager : MonoBehaviour
             StartCoroutine(CSpawn());
             Release();
         }
-        if (player_transform.position.z - passZone > (fencespawnZ - tile_on_screen * tileLength))
+        if (player_transform.position.z - passZone > (fencespawnZ - fence_on_screen * fenceLength))
         {
             StartCoroutine(FenceSpawn());
             FenceRelease();
@@ -82,29 +83,36 @@ public class TileManager : MonoBehaviour
 
     IEnumerator FenceSpawn()
     {
-        // 1) 몇 개를 뽑을지 결정 (1~5개)
+        // 몇 개를 뽑을지 결정 (1~5개)
         int spawnCount = Random.Range(1, 6); // 1 이상 6 미만 → 1~5
-        lastSpawnCount = spawnCount;
-        // 2) 사용할 인덱스(0부터 4까지)를 매번 새로 생성
+        lastSpawnCount.Enqueue(spawnCount);
+        // 사용할 인덱스(0부터 4까지)를 매번 새로 생성
         List<int> available = new List<int> { 0, 1, 2, 3, 4 };
 
-        // 3) spawnCount 만큼 랜덤으로 뽑아서 스폰
+        // spawnCount 만큼 랜덤으로 뽑아서 스폰
         for (int i = 0; i < spawnCount && available.Count > 0; i++)
         {
             // available 중 랜덤 선택
             int randListIdx = Random.Range(0, available.Count);
             int idx = available[randListIdx];
 
-            // 위치 계산:  
-            // idx = 0 → x = -3  
-            // idx = 1 → x = -1  
-            // …  
-            // idx = 4 → x = 5  
+            // 위치 계산
             float x = -3 + idx * 2f;
-            Vector3 pos = new Vector3(x, 0, fencespawnZ);
+            Vector3 pos = new Vector3();
+            int PrefabsIndex = Random.Range(0, 10);
+            GameObject go = null;
+            if (PrefabsIndex == 0)
+            {
+                pos = new Vector3(x - 0.7f, 0.7f, fencespawnZ);
 
-            // 인스턴스 생성
-            var go = Instantiate(fencePrefabs[0], pos, Quaternion.identity, transform);
+                go = Instantiate(fencePrefabs[1], pos, Quaternion.identity, transform);
+            }
+            else
+            {
+                pos = new Vector3(x, 0, fencespawnZ);
+
+                go = Instantiate(fencePrefabs[0], pos, Quaternion.identity, transform);
+            }
             Fences.Add(go);
             fenceQueue.Enqueue(go);
             // 같은 idx 재사용 방지
@@ -127,7 +135,8 @@ public class TileManager : MonoBehaviour
 
     private void FenceRelease()
     {
-        for (int i = 0; i < lastSpawnCount && fenceQueue.Count > 0; i++)
+        int j = lastSpawnCount.Dequeue();
+        for (int i = 0; i < j && fenceQueue.Count > 0; i++)
         {
             var go = fenceQueue.Dequeue();
             Destroy(go);

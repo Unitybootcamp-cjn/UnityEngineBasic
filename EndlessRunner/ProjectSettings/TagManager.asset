@@ -7,6 +7,7 @@ TagManager:
   - Obstacle
   - Stair
   - Boss
+  - Boost
   layers:
   - Default
   - TransparentFX

@@ -21,7 +21,7 @@ public class DeadManager : MonoBehaviour
     {
         Debug.Log("SetScoreText");
         gameObject.SetActive(true);
-        current_score.text = ((int)(score)).ToString();
+        current_score.text = "점수 : " + ((int)(score)).ToString();
 
         //만약에 전달받은 점수가 현재 레지스트리의 하이스코어보다 크다면
         if (score > PlayerPrefs.GetInt("HIGH_SCORE"))
@@ -30,7 +30,7 @@ public class DeadManager : MonoBehaviour
             PlayerPrefs.SetInt("HIGH_SCORE", (int)score);
         }
 
-        high_score.text = PlayerPrefs.GetInt("HIGH_SCORE").ToString();
+        high_score.text = "최고 점수 : " + PlayerPrefs.GetInt("HIGH_SCORE").ToString();
     }
 
 
