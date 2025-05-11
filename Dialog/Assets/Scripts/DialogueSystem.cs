@@ -7,8 +7,8 @@ public class DialogueSystem : MonoBehaviour
 {
     [Header("Data & UI References")]
     public DialogueData dialogueData;
-    public Text dialogueText;      // TextMeshPro 쓰시면 TMP_Text로 교체
-    public Image dialogueImage;    // UI Image 컴포넌트
+    public Text dialogueText;
+    public Image dialogueImage;
     public Button nextButton;
 
     [Header("Typing Settings")]
