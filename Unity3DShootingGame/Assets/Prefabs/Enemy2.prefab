@@ -278,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   effect: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
+  coin: {fileID: 245423669454608352, guid: 63db1352ef01581438aebbf7a8386194, type: 3}
   hp: 3
 --- !u!54 &-4672664149479321038
 Rigidbody:

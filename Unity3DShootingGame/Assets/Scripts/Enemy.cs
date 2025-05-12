@@ -4,6 +4,8 @@ public class Enemy : MonoBehaviour
 {
     public float speed = 5f;
     public GameObject effect; //¿Ã∆Â∆Æ µÓ∑œ
+    public GameObject coin;
+
     [SerializeField] private int hp = 1;
 
     Bullet bullet;
@@ -46,6 +48,7 @@ public class Enemy : MonoBehaviour
             explosion.transform.position = transform.position;
             //Destroy(collision.gameObject);
             Destroy(gameObject);
+            Instantiate(coin, transform.position, Quaternion.identity);
         }
     }
 

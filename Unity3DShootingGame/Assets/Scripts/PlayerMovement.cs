@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         renderers = GetComponentsInChildren<Renderer>();
+        transform.position = Vector3.zero;
     }
 
     void Update()
@@ -26,9 +27,14 @@ public class PlayerMovement : MonoBehaviour
         float v = Input.GetAxis("Vertical");
 
         Vector3 dir = new Vector3(h, v, 0);
-
         transform.Translate(dir * speed * Time.deltaTime);
 
+        Vector3 pos = transform.position;
+
+        pos.x = Mathf.Clamp(pos.x, -3.4f, 3.4f);
+        pos.y = Mathf.Clamp(pos.y, -4.0f, 6.0f);
+
+        transform.position = pos;
         #region 필기
         //transform.Translate(Vector3 dir);
         //게임 오브젝트를 이동시키기 위한 용도
