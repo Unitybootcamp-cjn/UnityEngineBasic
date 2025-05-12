@@ -15,7 +15,7 @@ public class PlayerFire : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            Instantiate(bulletFactory, firePosition.transform.position, Quaternion.identity);
+            Instantiate(bulletFactory, firePosition.transform.position, Quaternion.identity);   
         }
     }
 }
