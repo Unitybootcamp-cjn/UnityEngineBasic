@@ -1,9 +1,24 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5;
+    public GameObject deadeffect; //죽을 때 이펙트 등록
+    Renderer[] renderers;
 
+    private float flickerDuration = 1.0f; //피격 시 반짝이는 시간
+    private float flickerInterval = 0.1f; //반짝이는 시간 인터벌
+
+    public float invincibleDuration = 1f;    // 무적 지속 시간
+    private bool isInvincible = false;       // 무적 중인지 여부
+
+    public int hp = 5; // 체력
+
+    private void Start()
+    {
+        renderers = GetComponentsInChildren<Renderer>();
+    }
 
     void Update()
     {
@@ -34,5 +49,54 @@ public class PlayerMovement : MonoBehaviour
         //순간적인 힘을 가할지를 처리할 수 있습니다.
         #endregion
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isInvincible) return; 
+
+        hp -= 1;
+        StartCoroutine(InvincibleCoroutine());
+        StartCoroutine(FlickerAll());
+        if (hp <= 0)
+        {
+            Destroy(gameObject);
+            var Deadexplosion = Instantiate(deadeffect);
+            Deadexplosion.transform.position = transform.position;
+        }
+    }
+
+    // 무적 코루틴
+    private IEnumerator InvincibleCoroutine()
+    {
+        isInvincible = true;
+
+        yield return new WaitForSeconds(invincibleDuration);
+        isInvincible = false;
+    }
+
+
+    // 피격 시 몸 반짝이는 코루틴
+    IEnumerator FlickerAll()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < flickerDuration)
+        {
+            SetRenderersVisible(false);
+            yield return new WaitForSeconds(flickerInterval);
+            SetRenderersVisible(true);
+            yield return new WaitForSeconds(flickerInterval);
+            elapsed += flickerInterval * 2;
+        }
+    }
+
+    //피격 시 몸 반짝이는 함수
+    void SetRenderersVisible(bool isVisible)
+    {
+        foreach (var rend in renderers)
+        {
+            rend.enabled = isVisible;
+        }
     }
 }
