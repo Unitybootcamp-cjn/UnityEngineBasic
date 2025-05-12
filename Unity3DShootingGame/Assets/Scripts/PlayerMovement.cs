@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
         transform.Translate(dir * speed * Time.deltaTime);
 
+        #region 필기
         //transform.Translate(Vector3 dir);
         //게임 오브젝트를 이동시키기 위한 용도
         //게임 오브젝트의 위치를 Vector3 방향으로 이동하게 됩니다.
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         //Rigidbody.AddForce(Vector3 dir, ForceMode mode);
         //물리적인 연산을 통해 움직임을 구현하고, 힘을 주는 설정에 따라 지속적으로 처리할 지,
         //순간적인 힘을 가할지를 처리할 수 있습니다.
-
+        #endregion
 
     }
 }
