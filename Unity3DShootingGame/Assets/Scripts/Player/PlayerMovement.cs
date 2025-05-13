@@ -23,8 +23,10 @@ public class PlayerMovement : MonoBehaviour
     {
         renderers = GetComponentsInChildren<Renderer>();
         transform.position = Vector3.zero;
+
         renderer = GetComponent<Renderer>();
-        if (CharacterManager.instance != null )
+
+        if (CharacterManager.instance != null)
             renderer.material = CharacterManager.instance.CharacterMaterial[CharacterManager.instance.materialIndex];
     }
 

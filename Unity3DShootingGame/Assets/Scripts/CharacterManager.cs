@@ -8,27 +8,36 @@ public class CharacterManager : MonoBehaviour
     public Material[] CharacterMaterial;
     public Button Leftbutton;
     public Button Rightbutton;
-    public Button Startbutton;
+    public GameObject CheckUI;
+    public GameObject Character;
+    Renderer renderer;
+
     public int materialIndex = 0;
 
     public static CharacterManager instance = null;
 
-    Renderer renderer;
 
-    void Start()
+    private void Awake()
     {
-        renderer = GetComponent<Renderer>();
-
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    void Start()
+    {
+        renderer = Character.GetComponent<Renderer>();
+
+        CheckUI.SetActive(false);
     }
 
     void Update()
     {
-        renderer.material = CharacterMaterial[materialIndex];
-
         if (materialIndex == 0)
         {
             Leftbutton.interactable = false;
@@ -52,14 +61,26 @@ public class CharacterManager : MonoBehaviour
     public void OnLeftButton()
     {
         materialIndex -= 1;
+        renderer.material = CharacterMaterial[materialIndex];
     }
 
     public void OnRightButton()
     {
         materialIndex += 1;
+        renderer.material = CharacterMaterial[materialIndex];
     }
-    public void OnStartButton()
+
+    public void OnGameStartButton()
+    {
+        CheckUI.SetActive(true);
+    }
+
+    public void OnYesButton()
     {
         SceneManager.LoadScene("GameScene");
+    }
+    public void OnNoButton()
+    {
+        CheckUI.SetActive(false);
     }
 }
