@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float v = - Input.GetAxis("Vertical");
 
         Vector3 dir = new Vector3(h, v, 0);
         transform.Translate(dir * speed * Time.deltaTime);
@@ -57,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    // 面倒 矫
     private void OnCollisionEnter(Collision collision)
     {
         if (isInvincible) return; 
@@ -71,6 +73,8 @@ public class PlayerMovement : MonoBehaviour
             Deadexplosion.transform.position = transform.position;
         }
     }
+
+    
 
     // 公利 内风凭
     private IEnumerator InvincibleCoroutine()
