@@ -69,14 +69,14 @@ public class Enemy : MonoBehaviour
             Die();
             ScoreManager.instance.Score += 100;
 
-            int rand = UnityEngine.Random.Range(0, 20);
+            int rand = UnityEngine.Random.Range(0, 40);
             if (rand == 0)
                 Instantiate(bombImage, transform.position, Quaternion.identity);
             if (rand == 1)
                 Instantiate(heal, transform.position, Quaternion.identity);
             if (rand == 2)
                 Instantiate(powerUp, transform.position, Quaternion.identity);
-            if (rand > 14)
+            if (rand > 30)
                 Instantiate(coin, transform.position, Quaternion.identity);
         }
     }

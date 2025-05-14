@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 //1. 사운드 구분을 위한 enum을 설계합니다.
 public enum SOUND_TYPE //유형만 나눈 enum
 {
@@ -51,6 +53,15 @@ public class SoundManager : MonoBehaviour
     private Dictionary<BGM, AudioClip> bgm_dict; //BGM 유형에 따른 오디오 클립
     private Dictionary<SFX, AudioClip> sfx_dict; //SFX 유형에 따른 오디오 클라 
 
+    private float bgm_value;
+    private float sfx_value;
+
+    public Slider bgm_slider;
+    public Slider sfx_slider;
+
+    public Toggle bgm_toggle;
+    public Toggle sfx_toggle;
+
     //3. 사운드 매니저는 전체 게임에서 1개만 필요하다.(싱글톤)
     //프로퍼티 형태로 만들어보는 인스턴스
     public static SoundManager Instance { get; private set; }
@@ -83,7 +94,13 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-
+    private void Start()
+    {
+        bgm_value = Mathf.Log10(bgm_slider.value) * 20;
+        audioMixer.SetFloat(bgmParameter, bgm_value);
+        sfx_value = Mathf.Log10(sfx_slider.value) * 20;
+        audioMixer.SetFloat(sfxParameter, sfx_value);
+    }
 
 
 
@@ -123,14 +140,18 @@ public class SoundManager : MonoBehaviour
     //Audio Mixer의 볼륨 단위는 0 db ~ - 80 d까지로 설정되어있습니다.
     public void SetBGMVolume(float volume)
     {
-        audioMixer.SetFloat(bgmParameter, Mathf.Log10(volume) * 20);
+        bgm_toggle.isOn = true;
+        bgm_value = Mathf.Log10(volume) * 20;
+        audioMixer.SetFloat(bgmParameter, bgm_value);
         //슬라이더 UI 최소 값이 0.0001로 해당 수치로 계산하면 -80
         //최대 값 1인 경우 0으로 계산됩니다.
     }
 
     public void SetSFXVolume(float volume)
     {
-        audioMixer.SetFloat(sfxParameter, Mathf.Log10(volume) * 20);
+        sfx_toggle.isOn = true;
+        sfx_value = Mathf.Log10(volume) * 20;
+        audioMixer.SetFloat(sfxParameter, sfx_value);
     }
 
     //누르면 무음이 되는 MuteBGM과 MuteSFX를 구현해주세요.
@@ -141,7 +162,7 @@ public class SoundManager : MonoBehaviour
         //Toggle 키를 체크했다는 전제로 짠 코드
         //삼항 연산
         //조건 ? T : F 로 작성되며 조건이 맞으면 T에 있는 값을, 아니면 F에 있는 값을 처리합니다.
-        audioMixer.SetFloat(bgmParameter, mute ? 0f : -80.0f);
+        audioMixer.SetFloat(bgmParameter, mute ? bgm_value : -80.0f);
     }
 
     public void MuteSFX(bool mute)
@@ -149,7 +170,7 @@ public class SoundManager : MonoBehaviour
         //Toggle 키를 체크했다는 전제로 짠 코드
         //삼항 연산
         //조건 ? T : F 로 작성되며 조건이 맞으면 T에 있는 값을, 아니면 F에 있는 값을 처리합니다.
-        audioMixer.SetFloat(sfxParameter, mute ? 0f : -80.0f);
+        audioMixer.SetFloat(sfxParameter, mute ? sfx_value : -80.0f);
     }
 
 }

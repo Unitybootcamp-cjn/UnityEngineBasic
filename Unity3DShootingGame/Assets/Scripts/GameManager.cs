@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverPanel;
 
-    private int coin = 0;
-
     [HideInInspector]
     public bool isGameOver = false;
 

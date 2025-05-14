@@ -84,11 +84,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (other.layer == bombLayer)
         {
+            if (ScoreManager.instance.bomb == 5)
+                return;
             ScoreManager.instance.bomb += 1;
             ScoreManager.instance.SetScoreText();
         }
         else if (other.layer == healLayer)
         {
+            if (hp == 5)
+                return;
             hp += 1;
         }
         else if (other.layer == powerUpLayer)

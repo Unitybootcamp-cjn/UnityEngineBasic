@@ -11,8 +11,8 @@ public class EnemyManager : MonoBehaviour
 
     //오브젝트 풀
     [Header("오브젝트 풀")]
-    private int poolSize = 30;
-    public GameObject[] pool;
+    private int poolSize = 50;
+    public GameObject[] enemypool;
     public Transform[] spawnPoint; // 기존 생성 위치
 
     int spawnCount = 0;
@@ -34,12 +34,12 @@ public class EnemyManager : MonoBehaviour
 
     private void CreatePool()
     {
-        pool = new GameObject[poolSize];
+        enemypool = new GameObject[poolSize];
 
         for (int i = 0; i < poolSize; i++)
         {
             var enemy = Instantiate(enemyFactory[enemyIndex]);
-            pool[i] = enemy;
+            enemypool[i] = enemy;
             enemy.SetActive(false);
         }
     }
@@ -73,11 +73,12 @@ public class EnemyManager : MonoBehaviour
         {
             spawnCount++;
 
-            if (spawnCount % 10 == 0)
+            if (spawnCount % 20 == 0)
             {
                 if (enemyIndex < enemyFactory.Length - 1)
                 {
                     enemyIndex++;
+                    CreatePool();
                 }
             }
             foreach (Transform spawn in spawnPoint)
@@ -85,7 +86,7 @@ public class EnemyManager : MonoBehaviour
 
                 for (int i = 0; i < poolSize; i++)
                 {
-                    var enemy = pool[i];
+                    var enemy = enemypool[i];
                     if (enemy.activeSelf == false)
                     {
                         enemy.transform.parent = transform;

@@ -9,8 +9,7 @@ AudioMixerGroupController:
   m_Name: BGM
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 11bf774b9cb66ce4b93350accb1bab75
-  m_Children:
-  - {fileID: 82643548235496502}
+  m_Children: []
   m_Volume: cd8cfab23efc45a4886cb88a71c2004e
   m_Pitch: 95d1b4eb006e7084a99de8793cce60bb
   m_Send: 00000000000000000000000000000000
@@ -59,6 +58,7 @@ AudioMixerGroupController:
   m_GroupID: 31038cba240df21479994ff78612fa95
   m_Children:
   - {fileID: -1099854094890314082}
+  - {fileID: 82643548235496502}
   m_Volume: 6f9b428b9296b1046b432ee6a73b1f97
   m_Pitch: f823117035f49014396900de403bcf88
   m_Send: 00000000000000000000000000000000

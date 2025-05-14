@@ -1784,7 +1784,7 @@ Transform:
   m_GameObject: {fileID: 514817236}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 10, z: 0}
+  m_LocalPosition: {x: -3, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2400,7 +2400,7 @@ Transform:
   m_GameObject: {fileID: 619640165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.33, z: 0}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2771,7 +2771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e26d19dbed386428a414bc54b2272a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 10
   deadeffect: {fileID: 8791802859087666345, guid: ae07f2a45f14a82428409cfe410e6002, type: 3}
   invincibleDuration: 1
   hp: 5
@@ -2822,12 +2822,11 @@ MonoBehaviour:
   - {fileID: 1247754608}
   - {fileID: 1425063199}
   bombeffect: {fileID: 2708598583397607911, guid: 6398d43fe79ea0140913dc5530c646af, type: 3}
-  poolSize: 10
   bulletObjectPool: []
-  shootInterval: 0.2
-  powerLevel: 1
+  shootInterval: 0.15
+  powerLevel: 0
   explosionRadius: 10
-  explosionDamage: 3
+  explosionDamage: 30
   Enemy:
     serializedVersion: 2
     m_Bits: 512
@@ -4283,7 +4282,7 @@ Transform:
   m_GameObject: {fileID: 1247754607}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -2.33, z: 0}
+  m_LocalPosition: {x: -3, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4416,7 +4415,10 @@ MonoBehaviour:
   enemyFactory:
   - {fileID: 8354333308738101989, guid: f8592531548815f4b9d6978e1aab0a04, type: 3}
   - {fileID: 2741760476272589118, guid: a002495740cc5e041b690819d4140e25, type: 3}
-  pool: []
+  - {fileID: 2281205872992512818, guid: abb2648d551ebb84983e9b8a7453308a, type: 3}
+  - {fileID: 4770029688724783901, guid: bd3294811a84ebb48a544d382819438e, type: 3}
+  - {fileID: 1012401975902796161, guid: c73934763015c1f48a60087a1b4f5d42, type: 3}
+  enemypool: []
   spawnPoint:
   - {fileID: 241433096}
   - {fileID: 1800364647}
@@ -4524,7 +4526,7 @@ Transform:
   m_GameObject: {fileID: 1304264270}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: -2.33, z: 0}
+  m_LocalPosition: {x: -1.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5152,7 +5154,7 @@ Transform:
   m_GameObject: {fileID: 1425063198}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: -2.33, z: 0}
+  m_LocalPosition: {x: 3, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5362,7 +5364,7 @@ Transform:
   m_GameObject: {fileID: 1513214172}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 10, z: 0}
+  m_LocalPosition: {x: 3, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5410,6 +5412,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 881e3f52c86c94f26a60718d35627cd8, type: 3}
   - type: 1
     clip: {fileID: 8300000, guid: 35fbad8cdde724f11ba6481f1e64af71, type: 3}
+  bgm_slider: {fileID: 354677183}
+  sfx_slider: {fileID: 860900461}
+  bgm_toggle: {fileID: 845164750}
+  sfx_toggle: {fileID: 1590895277}
 --- !u!4 &1545324961
 Transform:
   m_ObjectHideFlags: 0
@@ -5888,7 +5894,7 @@ Transform:
   m_GameObject: {fileID: 1612370357}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 10, z: 0}
+  m_LocalPosition: {x: -1.5, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6133,7 +6139,7 @@ Transform:
   m_GameObject: {fileID: 1800364646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 10, z: 0}
+  m_LocalPosition: {x: 1.5, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6350,7 +6356,7 @@ Transform:
   m_GameObject: {fileID: 2009489728}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -2.33, z: 0}
+  m_LocalPosition: {x: 1.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -19,10 +19,10 @@ public class PlayerFire : MonoBehaviour
 
     //오브젝트 풀[Object Pool]
     [Header("오브젝트 풀")]
-    public int poolSize = 150; // 1. 풀의 크기에 대한 설정(총알 개수)
+    int poolSize = 150; // 1. 풀의 크기에 대한 설정(총알 개수)
     public GameObject[] bulletObjectPool; // 2. 오브젝트 풀(배열 / 리스트)
 
-    public float shootInterval = 0.2f; //총알 자동발사 인터벌
+    public float shootInterval = 0.15f; //총알 자동발사 인터벌
     private bool isShooting = false; // 발사하고 있는가?
     public int powerLevel = 0;
 
@@ -111,7 +111,7 @@ public class PlayerFire : MonoBehaviour
         {
             isShooting = true;
             yield return new WaitForSeconds(shootInterval);
-            for (int j = 0; j <= 4; j++)
+            for (int j = 0; j <= powerLevel; j++)
             {
                 //풀 사이즈만큼 반복
                 for (int i = 0; i < poolSize; i++)

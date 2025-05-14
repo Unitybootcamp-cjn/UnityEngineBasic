@@ -22,7 +22,7 @@ public class StageManager : MonoBehaviour
         enemyManager.onEnemySpawned += EnemySpawned;
 
         //풀 내에 있는 몬스터들에게 이벤트 연결
-        foreach (var enemy in enemyManager.pool)
+        foreach (var enemy in enemyManager.enemypool)
         {
             var go = enemy.GetComponent<Enemy>();
             go.onDead += EnemyKilled;
