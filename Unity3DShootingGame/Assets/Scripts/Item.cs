@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Item : MonoBehaviour
 {
     public GameObject effect; //¿Ã∆Â∆Æ µÓ∑œ
 
-
+    float speed = 1f;
     void Update()
     {
-        transform.position += Vector3.down * Time.deltaTime;
+        transform.position += Vector3.down * Time.deltaTime * speed;
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -311,6 +311,9 @@ MonoBehaviour:
   effect: {fileID: 8194992990867289339, guid: 99bc28c0d45f51c4fbac01080b73edc7, type: 3}
   hitEffect: {fileID: 1141330259687333427, guid: 6718dc24203da53468af9ada8fef7d6d, type: 3}
   coin: {fileID: 245423669454608352, guid: 63db1352ef01581438aebbf7a8386194, type: 3}
+  bombImage: {fileID: 5263317336138949057, guid: 7c72ab40de602bd419da79ab2a9f766a, type: 3}
+  heal: {fileID: 2508023571032199977, guid: f1cfe2a7acc07b445bb08e7980789ac8, type: 3}
+  powerUp: {fileID: 1226037155757824209, guid: e889c9c066467a949ad2a415311ada69, type: 3}
   hp: 1
 --- !u!54 &3732889729638600516
 Rigidbody:

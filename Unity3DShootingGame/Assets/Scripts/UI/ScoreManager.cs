@@ -7,11 +7,13 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI currentScoreUI;
     public TextMeshProUGUI highScoreUI;
     public TextMeshProUGUI coinUI;
+    public TextMeshProUGUI bombUI;
 
     [Header("== Fields ==")]
     public int currentScore;
     public int highScore;
     public int coin = 0;
+    public int bomb = 0;
 
     //점수에 대한 프로퍼티 설계
     public int Score
@@ -41,6 +43,7 @@ public class ScoreManager : MonoBehaviour
         currentScoreUI.text = "Current Score : " + currentScore;
         highScoreUI.text = "High Score : " + PlayerPrefs.GetInt("HIGH_SCORE");
         coinUI.text = coin.ToString();
+        bombUI.text = bomb.ToString();
     }
 
     #region 싱글톤

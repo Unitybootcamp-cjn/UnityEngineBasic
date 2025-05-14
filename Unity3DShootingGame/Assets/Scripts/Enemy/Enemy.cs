@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,18 +8,21 @@ public class Enemy : MonoBehaviour
     public GameObject effect; //이펙트 등록
     public GameObject hitEffect; //맞을 때 이펙트 등록
     public GameObject coin;
+    public GameObject bombImage;
+    public GameObject heal;
+    public GameObject powerUp;
+
+    public Action onDead;
     
 
     [SerializeField] private int hp = 1;
 
-    Bullet bullet;
 
     Vector3 dir; //움직일 방향
 
     private void Start()
     {
-        int randValue = Random.Range(0, 10);
-        bullet = new Bullet();
+        int randValue = UnityEngine.Random.Range(0, 10);
 
         //플레이어 방향으로 이동
         if (randValue < 3)
@@ -45,6 +49,12 @@ public class Enemy : MonoBehaviour
         transform.position += dir * speed * Time.deltaTime;
     }
 
+    public void Die()
+    {
+        onDead?.Invoke();
+        gameObject.SetActive(false);
+    }
+
     public void ApplyDamage(int damage)
     {
         hp -= damage;
@@ -55,9 +65,19 @@ public class Enemy : MonoBehaviour
         {
             var explosion = Instantiate(effect);
             explosion.transform.position = transform.position;
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Die();
             ScoreManager.instance.Score += 100;
-            Instantiate(coin, transform.position, Quaternion.identity);
+
+            int rand = UnityEngine.Random.Range(0, 20);
+            if (rand == 0)
+                Instantiate(bombImage, transform.position, Quaternion.identity);
+            if (rand == 1)
+                Instantiate(heal, transform.position, Quaternion.identity);
+            if (rand == 2)
+                Instantiate(powerUp, transform.position, Quaternion.identity);
+            if (rand > 14)
+                Instantiate(coin, transform.position, Quaternion.identity);
         }
     }
 
@@ -80,9 +100,12 @@ public class Enemy : MonoBehaviour
         {
             var explosion = Instantiate(effect);
             explosion.transform.position = transform.position;
-            Destroy(gameObject);
+            Die();
             ScoreManager.instance.Score += 100;
-            Instantiate(coin, transform.position, Quaternion.identity);
+
+            int rand = UnityEngine.Random.Range(0, 5);
+            if(rand == 0)
+                Instantiate(coin, transform.position, Quaternion.identity);
         }
     }
 

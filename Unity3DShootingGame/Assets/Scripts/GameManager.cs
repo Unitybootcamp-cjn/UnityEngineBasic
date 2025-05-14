@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     public void SetGameOver()
     {
+        Time.timeScale = 0f;
         isGameOver = true;
         ShowGameOverPanel();
     }
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour
 
     public void PlayAgain()
     {
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
         SceneManager.LoadScene("GameScene");
     }
 

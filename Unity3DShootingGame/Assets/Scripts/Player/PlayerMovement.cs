@@ -7,9 +7,9 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5;
     public GameObject deadeffect; //죽을 때 이펙트 등록
+    
     Renderer[] renderers;
     Renderer renderer;
-
 
     private float flickerDuration = 1.0f; //피격 시 반짝이는 시간
     private float flickerInterval = 0.1f; //반짝이는 시간 인터벌
@@ -71,13 +71,31 @@ public class PlayerMovement : MonoBehaviour
     {
         var other = collision.gameObject;
         int coinLayer = LayerMask.NameToLayer("Coin");
+        int bombLayer = LayerMask.NameToLayer("Bomb");
         int enemyLayer = LayerMask.NameToLayer("Enemy");
+        int healLayer = LayerMask.NameToLayer("Heal");
+        int powerUpLayer = LayerMask.NameToLayer("PowerUp");
 
         if (other.layer == coinLayer)
         {
             ScoreManager.instance.Score += 200;
             ScoreManager.instance.coin += 1;
             ScoreManager.instance.SetScoreText();
+        }
+        else if (other.layer == bombLayer)
+        {
+            ScoreManager.instance.bomb += 1;
+            ScoreManager.instance.SetScoreText();
+        }
+        else if (other.layer == healLayer)
+        {
+            hp += 1;
+        }
+        else if (other.layer == powerUpLayer)
+        {
+            if (PlayerFire.Instance.powerLevel == 4)
+                return;
+            PlayerFire.Instance.powerLevel += 1;
         }
         else if (other.layer == enemyLayer)
         {
