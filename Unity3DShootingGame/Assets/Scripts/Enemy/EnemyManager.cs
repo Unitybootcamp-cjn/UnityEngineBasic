@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
     private int poolSize = 50;
     public GameObject[] enemypool;
     public Transform[] spawnPoint; // 기존 생성 위치
+    public BossManager bossManager;
 
     int spawnCount = 0;
     int enemyIndex = 0; // 적 단계
@@ -28,7 +29,6 @@ public class EnemyManager : MonoBehaviour
     }
     private void Start()
     {
-        
         StartEnemyRoutine();
     }
 
@@ -79,6 +79,10 @@ public class EnemyManager : MonoBehaviour
                 {
                     enemyIndex++;
                     CreatePool();
+                }
+                else
+                {
+                    bossManager.Spawn();
                 }
             }
             foreach (Transform spawn in spawnPoint)

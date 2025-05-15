@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Ãæµ¹ ½Ã
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         var other = collision.gameObject;
         int coinLayer = LayerMask.NameToLayer("Coin");

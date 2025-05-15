@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
         transform.position += dir * speed * Time.deltaTime;
 
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         gameObject.SetActive(false);
         //Destroy(gameObject);

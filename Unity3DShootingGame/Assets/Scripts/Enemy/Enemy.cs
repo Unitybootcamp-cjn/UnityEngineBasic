@@ -16,16 +16,26 @@ public class Enemy : MonoBehaviour
     public Action onDead;
     
 
-    [SerializeField] private int hp = 1;
+    public int hp ;
 
-    public float invincibleDuration = 0.01f;    // 公利 瘤加 矫埃
+    public float invincibleDuration = 0.1f;    // 公利 瘤加 矫埃
     private bool isInvincible = false;       // 公利 吝牢瘤 咯何
 
     Vector3 dir; //框流老 规氢
 
-    private void Awake()
+
+    private void OnEnable()
     {
+        hp = GetComponent<Enemy>().hp;
+        StopAllCoroutines();
+        isInvincible = true;
         StartCoroutine(InvincibleCoroutine());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        isInvincible = false;
     }
 
     private void Start()
@@ -60,7 +70,6 @@ public class Enemy : MonoBehaviour
     // 公利 内风凭
     private IEnumerator InvincibleCoroutine()
     {
-        isInvincible = true;
         yield return new WaitForSeconds(invincibleDuration);
         isInvincible = false;
     }
@@ -100,7 +109,7 @@ public class Enemy : MonoBehaviour
     }
 
     //面倒 矫累
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         var other = collision.gameObject;
         int bulletLayer = LayerMask.NameToLayer("Bullet");

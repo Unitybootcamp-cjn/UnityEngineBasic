@@ -13,8 +13,7 @@ public class BossManager : MonoBehaviour
 
     public void Spawn()
     {
-        Instantiate(boss);
-
+        Instantiate(boss, transform.position, Quaternion.identity);
         enemyManager.isBoss = true;
     }
 
