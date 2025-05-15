@@ -10,7 +10,7 @@ public class Item : MonoBehaviour
         transform.position += Vector3.down * Time.deltaTime * speed;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         var other = collision.gameObject;
         int playerLayer = LayerMask.NameToLayer("Player");

@@ -284,6 +284,7 @@ MonoBehaviour:
   heal: {fileID: 2508023571032199977, guid: f1cfe2a7acc07b445bb08e7980789ac8, type: 3}
   powerUp: {fileID: 1226037155757824209, guid: e889c9c066467a949ad2a415311ada69, type: 3}
   hp: 10
+  max_hp: 10
   invincibleDuration: 0.3
 --- !u!54 &-4672664149479321038
 Rigidbody:

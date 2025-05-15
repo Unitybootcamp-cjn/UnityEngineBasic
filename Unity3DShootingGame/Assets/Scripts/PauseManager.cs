@@ -30,6 +30,11 @@ public class PauseManager : MonoBehaviour
             PauseGame();
     }
 
+    public void OnResumeButton()
+    {
+        ResumeGame();
+    }
+
     void PauseGame()
     {
         // Ω√∞£ ∏ÿ√ﬂ±‚

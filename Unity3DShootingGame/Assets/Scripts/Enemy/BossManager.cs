@@ -14,6 +14,7 @@ public class BossManager : MonoBehaviour
     public void Spawn()
     {
         Instantiate(boss, transform.position, Quaternion.identity);
+        boss.SetActive(true);
         enemyManager.isBoss = true;
     }
 

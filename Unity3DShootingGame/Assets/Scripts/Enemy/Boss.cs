@@ -13,14 +13,13 @@ public class Boss : MonoBehaviour
 
     public int hp = 1000;
 
-    public float invincibleDuration = 0.01f;    // 公利 瘤加 矫埃
+    public float invincibleDuration = 0.3f;    // 公利 瘤加 矫埃
     private bool isInvincible = false;       // 公利 吝牢瘤 咯何
 
     Vector3 dir; //框流老 规氢
 
     private void Awake()
     {
-        StartCoroutine(InvincibleCoroutine());
     }
 
     private void Start()
@@ -32,12 +31,22 @@ public class Boss : MonoBehaviour
         if(transform.position.y > 6.0)
             transform.position += Vector3.down * speed * Time.deltaTime;
     }
+    private void OnEnable()
+    {
+        StopAllCoroutines();
+        isInvincible = true;
+        StartCoroutine(InvincibleCoroutine());
+    }
 
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        isInvincible = false;
+    }
     // 公利 内风凭
 
     private IEnumerator InvincibleCoroutine()
     {
-        isInvincible = true;
         yield return new WaitForSeconds(invincibleDuration);
         isInvincible = false;
     }

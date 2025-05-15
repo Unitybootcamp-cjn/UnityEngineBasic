@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     
 
     public int hp ;
-
+    public int max_hp;
     public float invincibleDuration = 0.1f;    // 무적 지속 시간
     private bool isInvincible = false;       // 무적 중인지 여부
 
@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        hp = GetComponent<Enemy>().hp;
+        hp = GetComponent<Enemy>().max_hp;
         StopAllCoroutines();
         isInvincible = true;
         StartCoroutine(InvincibleCoroutine());
