@@ -30,6 +30,8 @@ public class TouchPad : MonoBehaviour
     public void ButtonUp()
     {
         _buttonPressed = false;
+        _touchPad.position = _startPos;
+        _player.OnStickChanged(new Vector2(0,0));
     }
 
     private void FixedUpdate()

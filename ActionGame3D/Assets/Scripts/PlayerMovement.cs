@@ -61,6 +61,8 @@ public class PlayerMovement : MonoBehaviour
     public void OnAttackUp()
     {
         attacking = false;
+        animator.SetBool("Combo", false);
+        animator.ResetTrigger("Attack");
     }
 
     public void OnSkillDown()
@@ -103,6 +105,7 @@ public class PlayerMovement : MonoBehaviour
             if (v < 0f)
                 back = -1f;
 
+            Debug.Log(new Vector2(h, v).magnitude);
             animator.SetFloat("Speed", new Vector2(h, v).magnitude);
             //magnitude == 벡터의 길이, 크기
 
@@ -113,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vector3 speed = rbody.linearVelocity;
                 speed.x = 4 * h;
-                speed.y = 4 * v;
+                speed.z = 4 * v;
                 rbody.linearVelocity = speed;
 
                 //방향 전환
