@@ -284,6 +284,7 @@ MonoBehaviour:
   heal: {fileID: 2508023571032199977, guid: f1cfe2a7acc07b445bb08e7980789ac8, type: 3}
   powerUp: {fileID: 1226037155757824209, guid: e889c9c066467a949ad2a415311ada69, type: 3}
   hp: 10
+  invincibleDuration: 0.01
 --- !u!54 &-4672664149479321038
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -309,7 +310,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &5202357483865957783
 CapsuleCollider:

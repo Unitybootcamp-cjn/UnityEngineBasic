@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,12 +18,19 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private int hp = 1;
 
+    public float invincibleDuration = 0.01f;    // 무적 지속 시간
+    private bool isInvincible = false;       // 무적 중인지 여부
 
     Vector3 dir; //움직일 방향
 
+    private void Awake()
+    {
+        StartCoroutine(InvincibleCoroutine());
+    }
+
     private void Start()
     {
-        int randValue = UnityEngine.Random.Range(0, 10);
+        int randValue = UnityEngine.Random.Range(0, 100);
 
         //플레이어 방향으로 이동
         if (randValue < 3)
@@ -49,6 +57,14 @@ public class Enemy : MonoBehaviour
         transform.position += dir * speed * Time.deltaTime;
     }
 
+    // 무적 코루틴
+    private IEnumerator InvincibleCoroutine()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleDuration);
+        isInvincible = false;
+    }
+
     public void Die()
     {
         onDead?.Invoke();
@@ -57,6 +73,8 @@ public class Enemy : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
+        if (isInvincible) return;
+
         hp -= damage;
         var hiteffect = Instantiate(hitEffect);
         hiteffect.transform.position = transform.position;

@@ -73,7 +73,7 @@ public class EnemyManager : MonoBehaviour
         {
             spawnCount++;
 
-            if (spawnCount % 20 == 0)
+            if (spawnCount % 5 == 0)
             {
                 if (enemyIndex < enemyFactory.Length - 1)
                 {
