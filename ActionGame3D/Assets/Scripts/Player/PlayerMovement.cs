@@ -105,7 +105,6 @@ public class PlayerMovement : MonoBehaviour
             if (v < 0f)
                 back = -1f;
 
-            Debug.Log(new Vector2(h, v).magnitude);
             animator.SetFloat("Speed", new Vector2(h, v).magnitude);
             //magnitude == 벡터의 길이, 크기
 
