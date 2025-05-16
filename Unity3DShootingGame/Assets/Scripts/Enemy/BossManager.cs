@@ -9,18 +9,28 @@ public class BossManager : MonoBehaviour
     public GameObject boss;
     public EnemyManager enemyManager;
 
+    public static BossManager instance;
 
+    private void Start()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     public void Spawn()
     {
-        Instantiate(boss, transform.position, Quaternion.identity);
-        boss.SetActive(true);
+        Debug.Log("보스 스폰");
+        Instantiate(boss);
         enemyManager.isBoss = true;
     }
 
     public void OnDead()
     {
-        enemyManager.isBoss = false;
-        enemyManager.StartEnemyRoutine();
+        Debug.Log("보스 죽음");
+        GameManager.instance.SetGameOver();
+        //enemyManager.isBoss = false;
+        //enemyManager.StartEnemyRoutine();
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public GameObject[] enemyFactory; //적 공장
-
+    public GameObject boss;
     public event Action onEnemySpawned; //적 생성 시의 콜백 기능 구현
 
     //오브젝트 풀
@@ -83,6 +83,10 @@ public class EnemyManager : MonoBehaviour
                 else
                 {
                     bossManager.Spawn();
+                    //var go = Instantiate(boss);
+                    //go.transform.position += Vector3.up * 2;
+                    //isBoss = true;
+                    break;
                 }
             }
             foreach (Transform spawn in spawnPoint)

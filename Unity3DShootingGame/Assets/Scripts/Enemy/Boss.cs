@@ -7,7 +7,6 @@ public class Boss : MonoBehaviour
     public float speed = 5f;
     public GameObject effect; //이펙트 등록
     public GameObject hitEffect; //맞을 때 이펙트 등록
-
     public Action onDead;
 
 
@@ -18,14 +17,6 @@ public class Boss : MonoBehaviour
 
     Vector3 dir; //움직일 방향
 
-    private void Awake()
-    {
-    }
-
-    private void Start()
-    {
-
-    }
     private void Update()
     {
         if(transform.position.y > 6.0)
@@ -53,6 +44,7 @@ public class Boss : MonoBehaviour
     public void Die()
     {
         onDead?.Invoke();
+        BossManager.instance.OnDead();
         gameObject.SetActive(false);
     }
     public void ApplyDamage(int damage)
