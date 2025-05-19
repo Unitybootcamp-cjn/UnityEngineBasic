@@ -65,6 +65,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Death()
     {
+        StageController.Instance.FinishGame();
         isDead = true;
         animator.SetTrigger("Die"); // TODO : 죽었을 때의 애니메이션 만들어서 연결해놓기 
         playerMovement.enabled = false; //PlayerMovement에 대한 비활성화

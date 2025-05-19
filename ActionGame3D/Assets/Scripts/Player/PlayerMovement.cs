@@ -104,6 +104,32 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+
+        animator.SetFloat("Speed", new Vector2(h, v).magnitude);
+
+        Vector3 dir = new Vector3(h, 0f, v);
+        transform.Translate(dir * 5.0f * Time.deltaTime);
+
+        Rigidbody rbody = GetComponent<Rigidbody>();
+
+        if (rbody)
+        {
+            Vector3 speed = rbody.linearVelocity;
+            speed.x = 4 * h;
+            speed.z = 4 * v;
+            rbody.linearVelocity = speed;
+
+            //방향 전환
+            if (h != 0f && v != 0f)
+            {
+                transform.rotation = Quaternion.LookRotation(new Vector3(h, 0f, v));
+            }
+        }
+
+#else
         //애니메이터에 대한 연결이 진행되야 작동하도록 처리
         if (animator)
         {
@@ -133,5 +159,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+#endif
+
     }
 }
