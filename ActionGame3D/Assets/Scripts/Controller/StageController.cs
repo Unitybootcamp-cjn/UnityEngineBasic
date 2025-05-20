@@ -11,8 +11,12 @@ public class StageController : MonoBehaviour
     public int StagePoint = 0; //점수
 
     public Text PointText;   //점수를 표현할 UI
+    public Text QuestText;   //퀘스트를 표현할 UI
+    public QuestData QuestData; //등록할 퀘스트 데이터
     public Image fade_Image;
     public float duration = 5.0f;
+
+    public bool accecptQuest = false;
 
     private void Awake()
     {
@@ -39,6 +43,8 @@ public class StageController : MonoBehaviour
             });
 
         DialogManager.Instance.Push(alert);
+
+
     }
 
     IEnumerator FadeIn()
@@ -103,5 +109,42 @@ public class StageController : MonoBehaviour
 
         //매니저에 등록
         DialogManager.Instance.Push(confirm);
+    }
+
+
+    public void OnQuest()
+    {
+
+        if (accecptQuest)
+        {
+            DialogDataAlert alert = new DialogDataAlert("안내문", "이미 퀘스트를 받은 상태입니다!");
+            DialogManager.Instance.Push(alert);
+            return;
+        }
+
+        //     //퀘스트 콜백
+        DialogDataQuest quest = new DialogDataQuest("퀘스트 등장", "퀘스트를 실행하시겠습니까?", QuestData,
+    delegate (bool answer)
+    {
+        if (answer)
+        {
+            accecptQuest = true;
+            SetData();
+        }
+        else
+        {
+            Debug.Log("퀘스트 수락 x");
+        }
+    });
+        DialogManager.Instance.Push(quest);
+    }
+
+    public void SetData()
+    {
+
+        QuestText.text = $"{QuestData.title}";
+        QuestText.text += "\n" + QuestData.description;
+        QuestText.text += $"\n현재 남은 마리 수 : {QuestData.currentCount} / {QuestData.GoalCount} ";
+        QuestText.text += $"\n 퀘스트 보상 {QuestData.Reward}";
     }
 }

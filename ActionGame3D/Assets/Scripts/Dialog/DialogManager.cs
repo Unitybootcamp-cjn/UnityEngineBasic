@@ -7,7 +7,7 @@ namespace Assets.Scripts.Dialog
 {
     public enum DialogType
     {
-        Alert, Confirm
+        Alert, Confirm, Quest
     }
     public sealed class DialogManager : MonoBehaviour
     {

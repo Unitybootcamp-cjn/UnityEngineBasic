@@ -1,50 +1,45 @@
-using UnityEngine;
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine.UI;
+using UnityEngine;
 
 namespace Assets.Scripts.Dialog
 {
-    public class DialogControllerConfirm : DialogController
+
+    class DialogControllerQuest : DialogController
     {
-        //컴포넌트
-        //1. 제목(Text)
-        //2. 내용(Text)
-        public Text LabelTitle;
-        public Text LabelContent;
-        //프로퍼티
-        //DialogDataConfirm
-        DialogDataConfirm Data { get; set; }
+        public Text LabelTitle; //타이틀
+        public Text LabelContent; //컨텐츠
+        DialogDataQuest Data { get; set; }
 
-
-        //오버라이드 
         public override void Awake()
         {
-            this.gameObject.SetActive(false);
             base.Awake();
         }
-
-        public override void Start()
-        {
-            base.Start();
-            //매니저에 등록
-            DialogManager.Instance.Regist(DialogType.Confirm, this);
-        }
-
 
         public override void Build(DialogData data)
         {
             base.Build(data);
 
             //데이터 여부 확인
-            if (!(data is DialogDataConfirm))
+            if (!(data is DialogDataQuest))
             {
                 Debug.LogError("Invalid dialog Data!");
                 return;
             }
             //메세지 등록
-            Data = data as DialogDataConfirm;
+            Data = data as DialogDataQuest;
             LabelTitle.text = Data.Title;
             LabelContent.text = Data.Message;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            DialogManager.Instance.Regist(DialogType.Quest, this);
         }
 
         public void OnYesButtonClick()
@@ -67,7 +62,5 @@ namespace Assets.Scripts.Dialog
             //Pop
             DialogManager.Instance.Pop();
         }
-
-
     }
 }

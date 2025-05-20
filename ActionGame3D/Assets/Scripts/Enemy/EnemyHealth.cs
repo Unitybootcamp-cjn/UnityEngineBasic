@@ -5,11 +5,11 @@ using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int startingHealth = 100; //시작 체력
+    public int startingHealth = 10; //시작 체력
     public int currentHealth;        //현재 체력
 
     public float flashSpeed = 5.0f;             //색 변경 시간
-    public Color flashColor = new Color(1, 0, 0, 0.1f); //빨간색
+    public Color flashColor = new Color(1, 0, 0, 0.4f); //빨간색  (컬러에서의 1f = 255)
     public float sinkSpeed = 1.0f;             //슬라임이 죽으면 아래로 가라앉을 속도
 
     bool isDead, isSinking; //적 상태에 따른 bool 값
@@ -28,8 +28,6 @@ public class EnemyHealth : MonoBehaviour
         if (damaged)
         {
             transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", flashColor);
-            Debug.Log("체크");
-
         }
         else
         {
@@ -85,6 +83,11 @@ public class EnemyHealth : MonoBehaviour
     private void Death()
     {
         StageController.Instance.AddPoint(10); //점수 획득
+        if (StageController.Instance.accecptQuest)
+        {
+            StageController.Instance.QuestData.currentCount++;
+            StageController.Instance.SetData();
+        }
 
         isDead = true;
         //죽었을 때, 맵을 뚫고 아래로 가라앉는 처리를 진행하기 위한 처리
