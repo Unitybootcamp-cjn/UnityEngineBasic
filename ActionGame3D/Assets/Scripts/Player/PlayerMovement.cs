@@ -108,7 +108,14 @@ public class PlayerMovement : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
+        float back = 1f;
+
+        if (v < 0f)
+            back = -1f;
+
         animator.SetFloat("Speed", new Vector2(h, v).magnitude);
+        animator.SetFloat("Direction", back * (Mathf.Atan2(h, v) * Mathf.Rad2Deg));
+
 
         Vector3 dir = new Vector3(h, 0f, v);
         transform.Translate(dir * 5.0f * Time.deltaTime);
@@ -140,6 +147,13 @@ public class PlayerMovement : MonoBehaviour
                 back = -1f;
 
             animator.SetFloat("Speed", new Vector2(h, v).magnitude);
+            animator.SetFloat("Direction", back * (Mathf.Atan2(h, v) * Mathf.Rad2Deg));
+            //h, v 기준   back        position
+            //0, 1          1           front
+            //1, 0          1           right
+            //0, -1         -1          back
+            //-1, -1        -1          left
+
             //magnitude == 벡터의 길이, 크기
 
             Rigidbody rbody = GetComponent<Rigidbody>();

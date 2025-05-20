@@ -1,7 +1,6 @@
 using System.Collections;
-using Unity.VisualScripting;
+using Assets.Scripts.Dialog;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -22,6 +21,8 @@ public class StageController : MonoBehaviour
 
     private void Start()
     {
+
+        //페이드 인
         if (fade_Image != null)
         {
             fade_Image.gameObject.SetActive(true);
@@ -29,6 +30,15 @@ public class StageController : MonoBehaviour
             fade_Image.color = new Color(c.r, c.g, c.b, 1.0f);
             StartCoroutine(FadeIn());
         }
+
+        //안내문 데이터 콜백
+        DialogDataAlert alert = new DialogDataAlert("START", "10초마다 생성되는 슬라임들을 제거하세요.",
+            () =>
+            {
+                Debug.Log("OK 버튼을 눌러주세요.");
+            });
+
+        DialogManager.Instance.Push(alert);
     }
 
     IEnumerator FadeIn()
@@ -70,8 +80,28 @@ public class StageController : MonoBehaviour
     //씬에 대한 리로드
     public void FinishGame()
     {
-        StartCoroutine(FadeOut());
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+        DialogDataConfirm confirm = new DialogDataConfirm("Restart?", "Please press OK if you want to restart the game"
+            ,
+            delegate (bool answer)
+            {
+                if (answer)
+                {
+                    StartCoroutine(FadeOut());
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
+                else
+                {
+                    //이전 프로젝트의 내용을 활용해서 에디터 상에서도 종료되도록 수정해주세요.
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#else
+                    Application.Quit();
+#endif
+                }
+            }
+         );
 
+        //매니저에 등록
+        DialogManager.Instance.Push(confirm);
+    }
 }
