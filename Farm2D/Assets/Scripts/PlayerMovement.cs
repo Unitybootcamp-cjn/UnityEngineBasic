@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerStat
 {
     public float speed; //플레이어의 이동 속도
-    public int count_of_harvest; //현재 수확물의 갯수
+    //public int count_of_harvest; //현재 수확물의 갯수
 }
 
 
@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
+
+    private Vector2 last = Vector2.down;
 
     void SetAnimateMovement(Vector3 direction)
     {
