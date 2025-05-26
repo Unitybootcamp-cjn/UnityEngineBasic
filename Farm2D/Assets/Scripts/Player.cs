@@ -21,12 +21,16 @@ public class Player : MonoBehaviour
         {
             if(tileManager != null)
             {
-                var position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
+                var world = transform.position;
 
-                if (GameManager.instance.TileManager.isInteractable(position))
+                var grid = tileManager.Interactables.WorldToCell(world);
+
+                //var position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
+
+                if (GameManager.instance.TileManager.isInteractable(grid))
                 {
                     Debug.Log("check");
-                    GameManager.instance.TileManager.SetInteract(position);
+                    GameManager.instance.TileManager.SetInteract(grid);
                 }
             }
         }
