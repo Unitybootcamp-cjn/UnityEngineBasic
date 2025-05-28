@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skill_Type: 1
   skillName: "\uBD88 \uBFDC\uAE30"
-  damage: 10
+  damage: 20
   description: "\uBD88\uC744 \uBFDC\uB294\uB2E4"
