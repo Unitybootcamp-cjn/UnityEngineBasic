@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82023c2c155d34247a728fd5694ab687, type: 3}
+  m_Name: "\uAE30\uBCF8 \uD0C0\uC6CC 2"
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  tower_name: "\uAE30\uBCF8 \uD0C0\uC6CC 2"
+  damage: 10
+  range: 1
+  attack_speed: 1
+  cost: 5
+  prefab: {fileID: 5844366312062867656, guid: a32dd2cf8e2f25b4bbc34c42741ea27c, type: 3}
+  weight: 2
